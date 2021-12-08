@@ -8,7 +8,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>apicurio-common-app-components-web</artifactId>
+    <artifactId>apicurio-common-app-components-mt</artifactId>
 
     <dependencies>
         <dependency>

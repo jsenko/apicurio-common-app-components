@@ -51,6 +51,7 @@
     </scm>
 
     <modules>
+        <module>mt</module>
         <module>web</module>
     </modules>
 
