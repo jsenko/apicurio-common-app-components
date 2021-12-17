@@ -21,6 +21,7 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -35,6 +36,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author eric.wittmann@gmail.com
  */
+@ApplicationScoped
 public class ResourceCacheControlFilter implements Filter {
 
     public static void disableHttpCaching(HttpServletResponse httpResponse) {

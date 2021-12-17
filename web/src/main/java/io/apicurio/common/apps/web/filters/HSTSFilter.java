@@ -18,6 +18,7 @@ package io.apicurio.common.apps.web.filters;
 
 import java.io.IOException;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -31,6 +32,7 @@ import javax.servlet.http.HttpServletResponse;
  * is not secure.
  * @author eric.wittmann@gmail.com
  */
+@ApplicationScoped
 public class HSTSFilter implements Filter {
 
     private static final long MAX_AGE = 31536000; // one year

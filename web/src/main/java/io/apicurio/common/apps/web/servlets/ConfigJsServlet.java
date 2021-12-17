@@ -53,13 +53,15 @@ public abstract class ConfigJsServlet extends HttpServlet {
         response.setContentType(ct);
         JsonFactory f = new JsonFactory();
         try (JsonGenerator g = f.createGenerator(response.getOutputStream(), JsonEncoding.UTF8)) {
-            response.getOutputStream().write("var ApicurioRegistryConfig = ".getBytes("UTF-8")); //$NON-NLS-1$ //$NON-NLS-2$
+            String varName = getVarName();
+            String varDecl = "var " + varName + " = ";
+            response.getOutputStream().write(varDecl.getBytes("UTF-8")); //$NON-NLS-1$
             ObjectMapper mapper = new ObjectMapper();
             mapper.setSerializationInclusion(Include.NON_NULL);
             g.setCodec(mapper);
             g.useDefaultPrettyPrinter();
 
-            Object config = generateConfig();
+            Object config = generateConfig(request);
 
             g.writeObject(config);
 
@@ -71,11 +73,58 @@ public abstract class ConfigJsServlet extends HttpServlet {
     }
 
     /**
+     * Called to get the variable name for the output JSONP payload.
+     * @return the JSONP variable name
+     */
+    protected abstract String getVarName();
+
+    /**
      * Called to generate the configuration object.  This will then be serialized to JSON
      * as the response payload.
+     * @param request the http request
      * @return generated config
      */
-    protected abstract Object generateConfig();
+    protected abstract Object generateConfig(HttpServletRequest request);
+
+    /**
+     * Generates a URL that the caller can use to access the REST API.
+     * @param request the HTTP request
+     */
+    protected String generateApiUrl(HttpServletRequest request) {
+        try {
+            String apiUrl = getApiUrlOverride();
+            if (apiUrl == null) {
+                String apiRelativePath = getApiRelativePath();
+                String url = resolveUrlFromXForwarded(request, apiRelativePath);
+                if (url != null) {
+                    return url;
+                }
+
+                url = request.getRequestURL().toString();
+                url = new URI(url).resolve(apiRelativePath).toString();
+                if (url.startsWith("http:") && request.isSecure()) {
+                    url = url.replaceFirst("http", "https");
+                }
+                return url;
+            } else {
+                return apiUrl;
+            }
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Gets the API URL override.  Returns null if none is configured.
+     * @return the API URL override
+     */
+    protected abstract String getApiUrlOverride();
+
+    /**
+     * Gets the relative path of the API.
+     * @return the relative API path
+     */
+    protected abstract String getApiRelativePath();
 
     /**
      * Resolves a URL path relative to the information found in X-Forwarded-Host and X-Forwarded-Proto.
