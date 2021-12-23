@@ -14,32 +14,33 @@
  * limitations under the License.
  */
 
-package io.apicurio.common.apps.storage.exceptions;
+package io.apicurio.common.apps.util;
 
 /**
- * @author eric.wittmann@gmail.com
+ * Simple pair, tuple, whatever you wanna call it
+ * TODO change this for commons-lang3 Pair whenever there are more reasons to add it as a dependency.
+ * @author Fabian Martinez
  */
-public class AlreadyExistsException extends StorageException {
+public class Pair<L,R> {
 
-    private static final long serialVersionUID = 5055445625652989500L;
+    private final L left;
+    private final R right;
 
-    public AlreadyExistsException() {
+    public Pair(L left, R right) {
+        this.left = left;
+        this.right = right;
     }
 
-    public AlreadyExistsException(Throwable cause) {
-        super(cause);
+    public static <L,R> Pair<L,R> of(L left, R right) {
+        return new Pair<>(left, right);
     }
 
-    public AlreadyExistsException(String reason, Throwable cause) {
-        super(reason, cause);
+    public L getLeft() {
+        return left;
     }
 
-    /**
-     * @see java.lang.Throwable#getMessage()
-     */
-    @Override
-    public String getMessage() {
-        return "Resource already exists.";
+    public R getRight() {
+        return right;
     }
 
 }

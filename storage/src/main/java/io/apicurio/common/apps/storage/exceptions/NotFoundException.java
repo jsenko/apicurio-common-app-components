@@ -19,7 +19,7 @@ package io.apicurio.common.apps.storage.exceptions;
 /**
  * @author eric.wittmann@gmail.com
  */
-public abstract class NotFoundException extends StorageException {
+public class NotFoundException extends StorageException {
 
     private static final long serialVersionUID = 7134307797211927863L;
 
@@ -32,6 +32,14 @@ public abstract class NotFoundException extends StorageException {
 
     public NotFoundException(String reason, Throwable cause) {
         super(reason, cause);
+    }
+
+    /**
+     * @see java.lang.Throwable#getMessage()
+     */
+    @Override
+    public String getMessage() {
+        return "Resource not found.";
     }
 
 }

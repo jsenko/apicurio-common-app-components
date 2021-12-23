@@ -57,7 +57,7 @@ public abstract class AbstractSqlStorage<S extends CommonSqlStatements> {
      */
     protected void doInitialize() {
         log.info("    JDBC URL: " + jdbcUrl);
-        handles.withHandleNoException((handle) -> {
+        handles.withHandle((handle) -> {
             if (initDB) {
                 if (!isDatabaseInitialized(handle)) {
                     log.info("Database not initialized.");

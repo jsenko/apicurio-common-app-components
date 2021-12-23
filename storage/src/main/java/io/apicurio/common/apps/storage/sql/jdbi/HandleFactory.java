@@ -24,7 +24,9 @@ import javax.inject.Inject;
 
 import io.agroal.api.AgroalDataSource;
 import io.apicurio.common.apps.core.AppException;
+import io.apicurio.common.apps.storage.exceptions.AlreadyExistsException;
 import io.apicurio.common.apps.storage.exceptions.StorageException;
+import io.apicurio.common.apps.storage.sql.CommonSqlStatements;
 
 /**
  * @author eric.wittmann@gmail.com
@@ -35,18 +37,31 @@ public class HandleFactory {
     @Inject
     AgroalDataSource dataSource;
 
-    public <R, X extends Exception> R withHandle(HandleCallback<R, X> callback) throws X {
+    @Inject
+    CommonSqlStatements sqlStatements;
+
+    private <R, X extends Exception> R _withHandle(HandleCallback<R, X> callback) throws X, SQLException {
         try (Connection connection = dataSource.getConnection()) {
             Handle handleImpl = new HandleImpl(connection);
             return callback.withHandle(handleImpl);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
         }
     }
 
-    public <R, X extends Exception> R withHandleNoException(HandleCallback<R, X> callback)  throws StorageException {
+    public <R, X extends Exception> R withHandle(HandleCallback<R, X> callback) throws X, AppException, StorageException, AlreadyExistsException {
         try {
-            return withHandle(callback);
+            return _withHandle(callback);
+        } catch (SQLException e) {
+            if (sqlStatements.isPrimaryKeyViolation(e) || sqlStatements.isForeignKeyViolation(e)) {
+                throw new AlreadyExistsException(e);
+            } else {
+                throw new StorageException(e);
+            }
+        } catch (StorageException e) {
+            if (sqlStatements.isPrimaryKeyViolation(e) || sqlStatements.isForeignKeyViolation(e)) {
+                throw new AlreadyExistsException(e);
+            } else {
+                throw e;
+            }
         } catch (AppException e) {
             throw e;
         } catch (Exception e) {
