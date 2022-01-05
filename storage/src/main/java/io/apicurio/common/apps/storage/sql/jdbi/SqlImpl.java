@@ -33,8 +33,8 @@ public abstract class SqlImpl<Q> implements Sql<Q> {
     protected final List<SqlParam> parameters;
 
     /**
-     * @param connection
-     * @param sql
+     * @param connection a database connection
+     * @param sql some SQL statement(s)
      */
     public SqlImpl(Connection connection, String sql) {
         this.connection = connection;
@@ -43,7 +43,7 @@ public abstract class SqlImpl<Q> implements Sql<Q> {
     }
 
     /**
-     * @see io.apicurio.registry.storage.impl.sql.jdb.Sql#bind(int, java.lang.String)
+     * @see io.apicurio.common.apps.storage.sql.jdbi.Sql#bind(int, java.lang.String)
      */
     @Override
     public Q bind(int position, String value) {
@@ -52,7 +52,7 @@ public abstract class SqlImpl<Q> implements Sql<Q> {
     }
 
     /**
-     * @see io.apicurio.registry.storage.impl.sql.jdb.Sql#bind(int, java.lang.Long)
+     * @see io.apicurio.common.apps.storage.sql.jdbi.Sql#bind(int, java.lang.Long)
      */
     @Override
     public Q bind(int position, Long value) {
@@ -61,7 +61,7 @@ public abstract class SqlImpl<Q> implements Sql<Q> {
     }
 
     /**
-     * @see io.apicurio.registry.storage.impl.sql.jdb.Sql#bind(int, java.lang.Integer)
+     * @see io.apicurio.common.apps.storage.sql.jdbi.Sql#bind(int, java.lang.Integer)
      */
     @Override
     public Q bind(int position, Integer value) {
@@ -70,7 +70,7 @@ public abstract class SqlImpl<Q> implements Sql<Q> {
     }
 
     /**
-     * @see io.apicurio.registry.storage.impl.sql.jdb.Sql#bind(int, java.lang.Enum)
+     * @see io.apicurio.common.apps.storage.sql.jdbi.Sql#bind(int, java.lang.Enum)
      */
     @Override
     public Q bind(int position, Enum<?> value) {
@@ -79,7 +79,7 @@ public abstract class SqlImpl<Q> implements Sql<Q> {
     }
 
     /**
-     * @see io.apicurio.registry.storage.impl.sql.jdb.Sql#bind(int, java.util.Date)
+     * @see io.apicurio.common.apps.storage.sql.jdbi.Sql#bind(int, java.util.Date)
      */
     @Override
     public Q bind(int position, Date value) {
@@ -88,7 +88,7 @@ public abstract class SqlImpl<Q> implements Sql<Q> {
     }
 
     /**
-     * @see io.apicurio.registry.storage.impl.sql.jdb.Sql#bind(int, byte[])
+     * @see io.apicurio.common.apps.storage.sql.jdbi.Sql#bind(int, byte[])
      */
     @Override
     public Q bind(int position, byte[] value) {

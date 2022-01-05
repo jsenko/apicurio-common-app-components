@@ -35,7 +35,7 @@ public class IntegerMapper implements RowMapper<Integer> {
     }
 
     /**
-     * @see io.apicurio.registry.storage.impl.sql.jdb.RowMapper#map(java.sql.ResultSet)
+     * @see io.apicurio.common.apps.storage.sql.jdbi.RowMapper#map(java.sql.ResultSet)
      */
     @Override
     public Integer map(ResultSet rs) throws SQLException {

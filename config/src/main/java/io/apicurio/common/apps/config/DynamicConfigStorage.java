@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Red Hat
+ * Copyright 2022 Red Hat
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,32 +14,22 @@
  * limitations under the License.
  */
 
-package io.apicurio.common.apps.storage.sql.jdbi.mappers;
+package io.apicurio.common.apps.config;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
-import io.apicurio.common.apps.storage.sql.jdbi.RowMapper;
+import java.time.Instant;
+import java.util.List;
 
 /**
  * @author eric.wittmann@gmail.com
  */
-public class LongMapper implements RowMapper<Long> {
+public interface DynamicConfigStorage {
 
-    public static final LongMapper instance = new LongMapper();
+    public DynamicConfigPropertyDto getConfigProperty(String propertyName);
 
-    /**
-     * Constructor.
-     */
-    private LongMapper() {
-    }
+    public void setConfigProperty(DynamicConfigPropertyDto propertyDto);
 
-    /**
-     * @see io.apicurio.common.apps.storage.sql.jdbi.RowMapper#map(java.sql.ResultSet)
-     */
-    @Override
-    public Long map(ResultSet rs) throws SQLException {
-        return rs.getLong(1);
-    }
+    public List<String> getTenantsWithStaleConfigProperties(Instant lastRefresh);
+
+    public List<DynamicConfigPropertyDto> getConfigProperties();
 
 }

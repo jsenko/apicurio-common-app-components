@@ -24,7 +24,7 @@ import io.apicurio.common.apps.storage.sql.jdbi.Handle;
 public interface IDbUpgrader {
 
     /**
-     * Called by the {@link SqlStorage} class when upgrading the database.
+     * Called by the {@link AbstractSqlStorage} class when upgrading the database.
      * @param dbHandle a DB handle
      * @throws Exception when the upgrade fails
      */

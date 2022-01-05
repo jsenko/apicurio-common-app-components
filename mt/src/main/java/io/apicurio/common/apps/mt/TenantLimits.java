@@ -14,36 +14,11 @@
  * limitations under the License.
  */
 
-package io.apicurio.common.apps.storage.exceptions;
+package io.apicurio.common.apps.mt;
 
 /**
  * @author eric.wittmann@gmail.com
  */
-public class NotFoundException extends StorageException {
-
-    private static final long serialVersionUID = 7134307797211927863L;
-
-    public NotFoundException() {
-    }
-
-    public NotFoundException(String message) {
-        super(message);
-    }
-
-    public NotFoundException(Throwable cause) {
-        super(cause);
-    }
-
-    public NotFoundException(String reason, Throwable cause) {
-        super(reason, cause);
-    }
-
-    /**
-     * @see java.lang.Throwable#getMessage()
-     */
-    @Override
-    public String getMessage() {
-        return "Resource not found.";
-    }
+public class TenantLimits {
 
 }

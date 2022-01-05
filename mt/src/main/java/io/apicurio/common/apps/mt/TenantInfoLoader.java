@@ -14,36 +14,26 @@
  * limitations under the License.
  */
 
-package io.apicurio.common.apps.storage.exceptions;
+package io.apicurio.common.apps.mt;
+
+import java.util.Optional;
+
+import javax.enterprise.context.ApplicationScoped;
 
 /**
  * @author eric.wittmann@gmail.com
  */
-public class NotFoundException extends StorageException {
+@ApplicationScoped
+public class TenantInfoLoader {
 
-    private static final long serialVersionUID = 7134307797211927863L;
-
-    public NotFoundException() {
-    }
-
-    public NotFoundException(String message) {
-        super(message);
-    }
-
-    public NotFoundException(Throwable cause) {
-        super(cause);
-    }
-
-    public NotFoundException(String reason, Throwable cause) {
-        super(reason, cause);
-    }
-
-    /**
-     * @see java.lang.Throwable#getMessage()
-     */
-    @Override
-    public String getMessage() {
-        return "Resource not found.";
+    public Optional<TenantInfo> loadInfo(String tenantId) {
+        // TODO Load the tenant info from the tenant manager
+        TenantInfo info = new TenantInfo();
+        info.setId(tenantId);
+        info.setOrgId(null);
+        info.setOwner(null);
+        info.setStatus(TenantStatus.READY);
+        return Optional.of(info);
     }
 
 }

@@ -29,7 +29,7 @@ public class HandleImpl implements Handle {
 
     /**
      * Constructor.
-     * @param connection
+     * @param connection a DB connection
      */
     public HandleImpl(Connection connection) {
         this.connection = connection;
@@ -48,7 +48,7 @@ public class HandleImpl implements Handle {
     }
 
     /**
-     * @see io.apicurio.common.apps.storage.jdbi.registry.storage.impl.sql.jdb.Handle#createQuery(java.lang.String)
+     * @see io.apicurio.common.apps.storage.sql.jdbi.Handle#createQuery(java.lang.String)
      */
     @Override
     public Query createQuery(String sql) {
@@ -57,7 +57,7 @@ public class HandleImpl implements Handle {
     }
 
     /**
-     * @see io.apicurio.common.apps.storage.jdbi.registry.storage.impl.sql.jdb.Handle#createUpdate(java.lang.String)
+     * @see io.apicurio.common.apps.storage.sql.jdbi.Handle#createUpdate(java.lang.String)
      */
     @Override
     public Update createUpdate(String sql) {

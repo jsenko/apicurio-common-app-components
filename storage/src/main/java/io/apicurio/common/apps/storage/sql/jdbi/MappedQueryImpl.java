@@ -42,8 +42,8 @@ public class MappedQueryImpl<T> implements MappedQuery<T>, Closeable {
 
     /**
      * Constructor.
-     * @param statement
-     * @param mapper
+     * @param statement a SQL prepared statement
+     * @param mapper a row mapper
      * @throws SQLException
      */
     public MappedQueryImpl(PreparedStatement statement, RowMapper<T> mapper) throws SQLException {
@@ -53,7 +53,7 @@ public class MappedQueryImpl<T> implements MappedQuery<T>, Closeable {
     }
 
     /**
-     * @see io.apicurio.registry.storage.impl.sql.jdb.MappedQuery#one()
+     * @see io.apicurio.common.apps.storage.sql.jdbi.MappedQuery#one()
      */
     @Override
     public T one() {
@@ -76,7 +76,7 @@ public class MappedQueryImpl<T> implements MappedQuery<T>, Closeable {
     }
 
     /**
-     * @see io.apicurio.registry.storage.impl.sql.jdb.MappedQuery#first()
+     * @see io.apicurio.common.apps.storage.sql.jdbi.MappedQuery#first()
      */
     @Override
     public T first() {
@@ -96,7 +96,7 @@ public class MappedQueryImpl<T> implements MappedQuery<T>, Closeable {
     }
 
     /**
-     * @see io.apicurio.registry.storage.impl.sql.jdb.MappedQuery#findOne()
+     * @see io.apicurio.common.apps.storage.sql.jdbi.MappedQuery#findOne()
      */
     @Override
     public Optional<T> findOne() {
@@ -119,7 +119,7 @@ public class MappedQueryImpl<T> implements MappedQuery<T>, Closeable {
     }
 
     /**
-     * @see io.apicurio.registry.storage.impl.sql.jdb.MappedQuery#findFirst()
+     * @see io.apicurio.common.apps.storage.sql.jdbi.MappedQuery#findFirst()
      */
     @Override
     public Optional<T> findFirst() {
@@ -139,7 +139,7 @@ public class MappedQueryImpl<T> implements MappedQuery<T>, Closeable {
     }
 
     /**
-     * @see io.apicurio.registry.storage.impl.sql.jdb.MappedQuery#list()
+     * @see io.apicurio.common.apps.storage.sql.jdbi.MappedQuery#list()
      */
     @Override
     public List<T> list() {
@@ -158,7 +158,7 @@ public class MappedQueryImpl<T> implements MappedQuery<T>, Closeable {
     }
 
     /**
-     * @see io.apicurio.registry.storage.impl.sql.jdb.MappedQuery#stream()
+     * @see io.apicurio.common.apps.storage.sql.jdbi.MappedQuery#stream()
      */
     @Override
     public Stream<T> stream() {

@@ -121,4 +121,51 @@ public abstract class AbstractCommonSqlStatements implements CommonSqlStatements
         }
     }
 
+    /**
+     * @see io.apicurio.common.apps.storage.sql.CommonSqlStatements#selectConfigProperties()
+     */
+    @Override
+    public String selectConfigProperties() {
+        return "SELECT c.* FROM config c WHERE c.tenantId = ?";
+    }
+
+    /**
+     * @see io.apicurio.common.apps.storage.sql.CommonSqlStatements#selectConfigPropertyByName()
+     */
+    @Override
+    public String selectConfigPropertyByName() {
+        return "SELECT c.* FROM config c WHERE c.tenantId = ? AND c.pname = ?";
+    }
+
+    /**
+     * @see io.apicurio.common.apps.storage.sql.CommonSqlStatements#deleteConfigProperty()
+     */
+    @Override
+    public String deleteConfigProperty() {
+        return "DELETE FROM config c WHERE c.tenantId = ? AND c.pname = ?";
+    }
+
+    /**
+     * @see io.apicurio.common.apps.storage.sql.CommonSqlStatements#insertConfigProperty()
+     */
+    @Override
+    public String insertConfigProperty() {
+        return "INSERT INTO config (tenantId, pname, ptype, pvalue, modifiedOn) VALUES (?, ?, ?, ?, ?)";
+    }
+
+    /**
+     * @see io.apicurio.common.apps.storage.sql.CommonSqlStatements#deleteAllConfigProperties()
+     */
+    @Override
+    public String deleteAllConfigProperties() {
+        return "DELETE FROM config c WHERE c.tenantId = ?";
+    }
+
+    /**
+     * @see io.apicurio.common.apps.storage.sql.CommonSqlStatements#selectTenantIdsByConfigModifiedOn()
+     */
+    @Override
+    public String selectTenantIdsByConfigModifiedOn() {
+        return "SELECT DISTINCT c.tenantId FROM config c WHERE c.modifiedOn >= ?";
+    }
 }

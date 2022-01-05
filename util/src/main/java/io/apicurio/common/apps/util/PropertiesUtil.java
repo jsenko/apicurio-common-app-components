@@ -38,7 +38,7 @@ import org.slf4j.LoggerFactory;
 public class PropertiesUtil {
     private static final Logger log = LoggerFactory.getLogger(PropertiesUtil.class);
     // explicit debug, since properties can have unresolved env vars
-    private static final boolean debug = Boolean.getBoolean("registry.debug");
+    private static final boolean debug = Boolean.getBoolean("app.debug");
 
     /**
      * Filter/strip prefixes from configuration properties.
@@ -50,7 +50,7 @@ public class PropertiesUtil {
         ApplicationProperties cp = ip.getAnnotated().getAnnotation(ApplicationProperties.class);
         if (cp == null) {
             throw new IllegalArgumentException(
-                    ip.getMember() + " is not annotated with @RegistryProperties"
+                    ip.getMember() + " is not annotated with @ApplicationProperties"
             );
         }
         String[] prefixes = Stream.of(cp.value())
@@ -59,7 +59,7 @@ public class PropertiesUtil {
                 .toArray(String[]::new);
         if (prefixes.length == 0) {
             throw new IllegalArgumentException(
-                    "Annotation @RegistryProperties on " + ip.getMember() +
+                    "Annotation @ApplicationProperties on " + ip.getMember() +
                             " is missing non-empty 'value' attribute"
             );
         }

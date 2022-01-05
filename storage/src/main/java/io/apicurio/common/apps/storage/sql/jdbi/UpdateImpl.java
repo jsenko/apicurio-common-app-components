@@ -29,15 +29,15 @@ public class UpdateImpl extends SqlImpl<Update> implements Update {
 
     /**
      * Constructor.
-     * @param connection
-     * @param sql
+     * @param connection a DB connection
+     * @param sql some SQL statement(s)
      */
     public UpdateImpl(Connection connection, String sql) {
         super(connection, sql);
     }
 
     /**
-     * @see io.apicurio.common.apps.storage.jdbi.registry.storage.impl.sql.jdb.Update#execute()
+     * @see io.apicurio.common.apps.storage.sql.jdbi.Update#execute()
      */
     @Override
     public int execute() {
@@ -50,7 +50,7 @@ public class UpdateImpl extends SqlImpl<Update> implements Update {
     }
 
     /**
-     * @see io.apicurio.common.apps.storage.jdbi.registry.storage.impl.sql.jdb.Update#executeNoUpdate()
+     * @see io.apicurio.common.apps.storage.sql.jdbi.Update#executeNoUpdate()
      */
     @Override
     public void executeNoUpdate() {

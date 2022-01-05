@@ -25,43 +25,63 @@ import java.util.List;
 public interface CommonSqlStatements {
 
     /**
-     * Gets the database type associated with these statements.
+     * @return the database type associated with these statements.
      */
     public String dbType();
 
     /**
      * Returns true if the given exception represents a primary key violation.
-     * @param error
+     * @param error the underlying error/stack
+     * @return true if the given error represents a primary key violation
      */
     public boolean isPrimaryKeyViolation(Exception error);
 
     /**
      * Returns true if the given exception represents a foreign key violation.
-     * @param error
+     * @param error the underlying error/stack
+     * @return true if the given error represents a foreign key violation
      */
     public boolean isForeignKeyViolation(Exception error);
 
     /**
-     * A statement that returns 'true' if the database has already been initialized.
+     * @return A statement that returns 'true' if the database has already been initialized.
      */
     public String isDatabaseInitialized();
 
     /**
-     * A sequence of statements needed to initialize the database.
+     * @return A sequence of statements needed to initialize the database.
      */
     public List<String> databaseInitialization();
 
     /**
-     * A sequence of statements needed to upgrade the DB from one version to another.
+     * @return A sequence of statements needed to upgrade the DB from one version to another.
      *
-     * @param fromVersion
-     * @param toVersion
+     * @param fromVersion the version being upgraded from
+     * @param toVersion the version being upgraded to
      */
     public List<String> databaseUpgrade(int fromVersion, int toVersion);
 
     /**
-     * A statement that returns the current DB version (pulled from the "apicurio" attribute table).
+     * @return A statement that returns the current DB version (pulled from the "apicurio" attribute table).
      */
     public String getDatabaseVersion();
+
+
+    /*
+     * The next few statements support config properties.
+     */
+
+    public String selectConfigProperties();
+
+    public String deleteConfigProperty();
+
+    public String insertConfigProperty();
+
+    public String deleteAllConfigProperties();
+
+    public String selectConfigPropertyByName();
+
+    public String selectTenantIdsByConfigModifiedOn();
+
 
 }

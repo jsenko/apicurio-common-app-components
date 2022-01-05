@@ -34,15 +34,15 @@ public class QueryImpl extends SqlImpl<Query> implements Query {
 
     /**
      * Constructor.
-     * @param connection
-     * @param sql
+     * @param connection a DB connection
+     * @param sql some SQL statement(s)
      */
     public QueryImpl(Connection connection, String sql) {
         super(connection, sql);
     }
 
     /**
-     * @see io.apicurio.common.apps.storage.jdbi.registry.storage.impl.sql.jdb.Query#setFetchSize(int)
+     * @see io.apicurio.common.apps.storage.sql.jdbi.Query#setFetchSize(int)
      */
     @Override
     public Query setFetchSize(int size) {
@@ -51,7 +51,7 @@ public class QueryImpl extends SqlImpl<Query> implements Query {
     }
 
     /**
-     * @see io.apicurio.common.apps.storage.jdbi.registry.storage.impl.sql.jdb.Query#map(io.apicurio.registry.storage.impl.sql.jdb.RowMapper)
+     * @see io.apicurio.common.apps.storage.sql.jdbi.Query#map(io.apicurio.common.apps.storage.sql.jdbi.RowMapper)
      */
     @Override
     public <T> MappedQuery<T> map(RowMapper<T> mapper) {
@@ -68,7 +68,7 @@ public class QueryImpl extends SqlImpl<Query> implements Query {
     }
 
     /**
-     * @see io.apicurio.common.apps.storage.jdbi.registry.storage.impl.sql.jdb.Query#mapTo(java.lang.Class)
+     * @see io.apicurio.common.apps.storage.sql.jdbi.Query#mapTo(java.lang.Class)
      */
     @Override
     public <T> MappedQuery<T> mapTo(Class<T> someClass) {

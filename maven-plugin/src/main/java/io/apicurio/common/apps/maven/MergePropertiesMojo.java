@@ -82,7 +82,7 @@ public class MergePropertiesMojo extends AbstractMojo {
             output.delete();
         }
         try (FileWriter writer = new FileWriter(output)) {
-            mergedProps.store(writer, "Properties merged by 'apicurio-registry-maven-plugin'");
+            mergedProps.store(writer, "Properties merged by 'apicurio-common-app-components-maven-plugin'");
             getLog().info("Merged properties written to: " + output.getName());
         } catch (Throwable t) {
             throw new MojoExecutionException("Failed to write merged properties to: " + output.getAbsolutePath());

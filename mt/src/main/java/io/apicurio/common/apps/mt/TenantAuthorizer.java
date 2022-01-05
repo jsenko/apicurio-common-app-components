@@ -14,36 +14,22 @@
  * limitations under the License.
  */
 
-package io.apicurio.common.apps.storage.exceptions;
+package io.apicurio.common.apps.mt;
+
+import javax.enterprise.context.ApplicationScoped;
+
+import io.quarkus.security.identity.SecurityIdentity;
+import io.smallrye.mutiny.Uni;
 
 /**
+ * TODO document
  * @author eric.wittmann@gmail.com
  */
-public class NotFoundException extends StorageException {
+@ApplicationScoped
+public class TenantAuthorizer {
 
-    private static final long serialVersionUID = 7134307797211927863L;
-
-    public NotFoundException() {
-    }
-
-    public NotFoundException(String message) {
-        super(message);
-    }
-
-    public NotFoundException(Throwable cause) {
-        super(cause);
-    }
-
-    public NotFoundException(String reason, Throwable cause) {
-        super(reason, cause);
-    }
-
-    /**
-     * @see java.lang.Throwable#getMessage()
-     */
-    @Override
-    public String getMessage() {
-        return "Resource not found.";
+    public void authorizeTenant(TenantInfo info, Uni<SecurityIdentity> identity) {
+        // TODO implement this!
     }
 
 }

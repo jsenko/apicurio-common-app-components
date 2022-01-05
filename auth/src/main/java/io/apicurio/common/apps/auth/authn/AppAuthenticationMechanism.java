@@ -27,6 +27,7 @@ import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
+import org.slf4j.Logger;
 
 import io.apicurio.common.apps.logging.audit.AuditHttpRequestContext;
 import io.apicurio.common.apps.logging.audit.AuditHttpRequestInfo;
@@ -53,6 +54,9 @@ import io.smallrye.mutiny.Uni;
 import io.vertx.ext.web.RoutingContext;
 
 public abstract class AppAuthenticationMechanism implements HttpAuthenticationMechanism {
+
+    @Inject
+    Logger log;
 
     @ConfigProperty(name = "app.authn.enabled", defaultValue = "false")
     boolean authEnabled;

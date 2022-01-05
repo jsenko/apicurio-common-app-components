@@ -39,7 +39,8 @@ public class DdlParser {
     }
 
     /**
-     * @param ddlFile
+     * @param ddlFile a DDL file reference
+     * @return a parsed set of SQL statements
      */
     public List<String> parse(File ddlFile) {
         try (InputStream is = new FileInputStream(ddlFile)) {
@@ -50,7 +51,8 @@ public class DdlParser {
     }
 
     /**
-     * @param ddlStream
+     * @param ddlStream a DDL input stream
+     * @return a parsed set of SQL statements
      * @throws IOException
      */
     public List<String> parse(InputStream ddlStream) throws IOException {

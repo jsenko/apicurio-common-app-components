@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Red Hat
+ * Copyright 2022 Red Hat
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,27 +19,35 @@ package io.apicurio.common.apps.storage.sql.jdbi.mappers;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import io.apicurio.common.apps.config.DynamicConfigPropertyDto;
 import io.apicurio.common.apps.storage.sql.jdbi.RowMapper;
 
 /**
  * @author eric.wittmann@gmail.com
  */
-public class LongMapper implements RowMapper<Long> {
+public class DynamicConfigPropertyDtoMapper implements RowMapper<DynamicConfigPropertyDto> {
 
-    public static final LongMapper instance = new LongMapper();
+    public static final DynamicConfigPropertyDtoMapper instance = new DynamicConfigPropertyDtoMapper();
 
     /**
      * Constructor.
      */
-    private LongMapper() {
+    private DynamicConfigPropertyDtoMapper() {
     }
 
     /**
      * @see io.apicurio.common.apps.storage.sql.jdbi.RowMapper#map(java.sql.ResultSet)
      */
     @Override
-    public Long map(ResultSet rs) throws SQLException {
-        return rs.getLong(1);
+    public DynamicConfigPropertyDto map(ResultSet rs) throws SQLException {
+        String name = rs.getString("pname");
+        String type = rs.getString("ptype");
+        String value = rs.getString("pvalue");
+        if (value == null) {
+            return null;
+        } else {
+            return new DynamicConfigPropertyDto(name, value, type);
+        }
     }
 
 }

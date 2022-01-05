@@ -35,9 +35,9 @@ public class SqlParam {
 
     /**
      * Constructor.
-     * @param position
-     * @param value
-     * @param type
+     * @param position a position in the SQL statement
+     * @param value the value of the param
+     * @param type the type of param
      */
     public SqlParam(int position, Object value, SqlParamType type) {
         this.position = position;
@@ -47,7 +47,7 @@ public class SqlParam {
 
     /**
      * Binds this SQL parameter to the given statement.
-     * @param statement
+     * @param statement a SQL prepared statement
      */
     public void bindTo(PreparedStatement statement) {
         int position = this.position + 1; // convert from sensible position (starts at 0) to JDBC position index (starts at 1)

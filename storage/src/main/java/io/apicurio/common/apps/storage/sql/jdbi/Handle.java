@@ -25,13 +25,15 @@ public interface Handle extends Closeable {
 
     /**
      * Create a new Query from the given SQL.
-     * @param sql
+     * @param sql a SQL query statement
+     * @return a new Query object created from the SQL
      */
     Query createQuery(String sql);
 
     /**
      * Create a new Update statement from the given SQL.
-     * @param sql
+     * @param sql a SQL update statement
+     * @return a new Query object created from the SQL
      */
     Update createUpdate(String sql);
 

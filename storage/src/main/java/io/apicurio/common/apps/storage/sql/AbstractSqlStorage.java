@@ -16,20 +16,28 @@
 
 package io.apicurio.common.apps.storage.sql;
 
+import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.slf4j.Logger;
 
+import io.apicurio.common.apps.config.DynamicConfigPropertyDto;
+import io.apicurio.common.apps.config.DynamicConfigStorage;
+import io.apicurio.common.apps.mt.TenantContext;
+import io.apicurio.common.apps.storage.exceptions.NotFoundException;
 import io.apicurio.common.apps.storage.sql.jdbi.Handle;
 import io.apicurio.common.apps.storage.sql.jdbi.HandleFactory;
+import io.apicurio.common.apps.storage.sql.jdbi.mappers.DynamicConfigPropertyDtoMapper;
 
 /**
  * @author eric.wittmann@gmail.com
  */
-public abstract class AbstractSqlStorage<S extends CommonSqlStatements> {
+public abstract class AbstractSqlStorage<S extends CommonSqlStatements> implements DynamicConfigStorage {
 
     @Inject
     protected Logger log;
@@ -39,6 +47,9 @@ public abstract class AbstractSqlStorage<S extends CommonSqlStatements> {
 
     @Inject
     protected S sqlStatements;
+
+    @Inject
+    protected TenantContext tenantContext;
 
     @ConfigProperty(name = "app.sql.init", defaultValue = "true")
     boolean initDB;
@@ -105,7 +116,7 @@ public abstract class AbstractSqlStorage<S extends CommonSqlStatements> {
     }
 
     private void initializeDatabase(Handle handle) {
-        log.info("Initializing the Apicurio Registry database.");
+        log.info("Initializing the database.");
         log.info("\tDatabase type: " + this.sqlStatements.dbType());
 
         final List<String> statements = this.sqlStatements.databaseInitialization();
@@ -123,7 +134,7 @@ public abstract class AbstractSqlStorage<S extends CommonSqlStatements> {
      * DDL upgrade scripts.
      */
     private void upgradeDatabase(Handle handle) {
-        log.info("Upgrading the Apicurio Hub API database.");
+        log.info("Upgrading the database.");
 
         int fromVersion = this.getDatabaseVersion(handle);
         int toVersion = dbVersion();
@@ -179,6 +190,88 @@ public abstract class AbstractSqlStorage<S extends CommonSqlStatements> {
             log.error("Error getting DB version.", e);
             return 0;
         }
+    }
+
+    /**
+     * @see io.apicurio.common.apps.config.DynamicConfigStorage#getConfigProperties()
+     */
+    @Override
+    public List<DynamicConfigPropertyDto> getConfigProperties() {
+        log.debug("Getting all config properties.");
+        return handles.withHandle( handle -> {
+            String sql = sqlStatements.selectConfigProperties();
+            return handle.createQuery(sql)
+                    .bind(0, tenantContext.getTenantId())
+                    .map(DynamicConfigPropertyDtoMapper.instance)
+                    .list()
+                    .stream()
+                    // Filter out possible null values.
+                    .filter(item -> item != null)
+                    .collect(Collectors.toList());
+        });
+    }
+
+    /**
+     * @see io.apicurio.common.apps.config.DynamicConfigStorage#getConfigProperty(java.lang.String)
+     */
+    @Override
+    public DynamicConfigPropertyDto getConfigProperty(String propertyName) {
+        log.debug("Selecting a single config property: {}", propertyName);
+        return handles.withHandle( handle -> {
+            String sql = sqlStatements.selectConfigPropertyByName();
+            Optional<DynamicConfigPropertyDto> res = handle.createQuery(sql)
+                    .bind(0, tenantContext.getTenantId())
+                    .bind(1, propertyName)
+                    .map(DynamicConfigPropertyDtoMapper.instance)
+                    .findOne();
+            return res.orElseThrow(() -> new NotFoundException("Dynamic configuration property not found: " + propertyName));
+        });
+    }
+
+    /**
+     * @see io.apicurio.common.apps.config.DynamicConfigStorage#setConfigProperty(io.apicurio.common.apps.config.DynamicConfigPropertyDto)
+     */
+    @Override
+    public void setConfigProperty(DynamicConfigPropertyDto property) {
+        log.debug("Setting a config property with name: {}  and value: {}", property.getName(), property.getValue());
+        handles.withHandle( handle -> {
+            String propertyName = property.getName();
+            String propertyValue = property.getValue();
+
+            // First delete the property row from the table
+            String sql = sqlStatements.deleteConfigProperty();
+            handle.createUpdate(sql)
+                  .bind(0, tenantContext.getTenantId())
+                  .bind(1, property.getName())
+                  .execute();
+
+            // Then create the row again with the new value
+            sql = sqlStatements.insertConfigProperty();
+            handle.createUpdate(sql)
+                  .bind(0, tenantContext.getTenantId())
+                  .bind(1, propertyName)
+                  .bind(2, property.getType())
+                  .bind(3, propertyValue)
+                  .bind(4, java.lang.System.currentTimeMillis())
+                  .execute();
+
+            return null;
+        });
+    }
+
+    /**
+     * @see io.apicurio.common.apps.config.DynamicConfigStorage#getTenantsWithStaleConfigProperties(java.time.Instant)
+     */
+    @Override
+    public List<String> getTenantsWithStaleConfigProperties(Instant since) {
+        log.debug("Getting all tenant IDs with stale config properties.");
+        return handles.withHandle( handle -> {
+            String sql = sqlStatements.selectTenantIdsByConfigModifiedOn();
+            return handle.createQuery(sql)
+                    .bind(0, since.toEpochMilli())
+                    .mapTo(String.class)
+                    .list();
+        });
     }
 
 }
