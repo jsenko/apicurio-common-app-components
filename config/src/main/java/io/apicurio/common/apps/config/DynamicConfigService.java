@@ -24,9 +24,9 @@ import java.util.Optional;
 @SuppressWarnings("rawtypes")
 public interface DynamicConfigService {
 
-    public String get(DynamicConfigProperty property);
-    public <T> T get(DynamicConfigProperty<T> property, Class<T> propertyType);
-    public Optional<String> getOptional(DynamicConfigProperty property);
-    public <T> Optional<T> getOptional(DynamicConfigProperty<T> property, Class<T> propertyType);
+    public String get(DynamicConfigPropertyDef property);
+    public <T> T get(DynamicConfigPropertyDef<T> property, Class<T> propertyType);
+    public Optional<String> getOptional(DynamicConfigPropertyDef property);
+    public <T> Optional<T> getOptional(DynamicConfigPropertyDef<T> property, Class<T> propertyType);
 
 }

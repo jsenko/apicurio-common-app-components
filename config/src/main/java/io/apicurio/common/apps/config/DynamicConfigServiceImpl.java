@@ -49,34 +49,34 @@ public class DynamicConfigServiceImpl implements DynamicConfigService {
     @Inject
     DynamicConfigStorage configStorage;
 
-    private Map<DynamicConfigProperty, Object> globalPropertyCache = new HashMap<>();
-    private Map<String, Map<DynamicConfigProperty, Object>> tenantPropertyCaches = new HashMap<>();
+    private Map<DynamicConfigPropertyDef, Object> globalPropertyCache = new HashMap<>();
+    private Map<String, Map<DynamicConfigPropertyDef, Object>> tenantPropertyCaches = new HashMap<>();
     private Instant lastRefresh = null;
 
     /**
-     * @see io.apicurio.common.apps.config.DynamicConfigService#get(io.apicurio.common.apps.config.DynamicConfigProperty)
+     * @see io.apicurio.common.apps.config.DynamicConfigService#get(io.apicurio.common.apps.config.DynamicConfigPropertyDef)
      */
     @SuppressWarnings("unchecked")
     @Override
-    public String get(DynamicConfigProperty property) {
+    public String get(DynamicConfigPropertyDef property) {
         return get(property, String.class);
     }
 
     /**
-     * @see io.apicurio.common.apps.config.DynamicConfigService#getOptional(io.apicurio.common.apps.config.DynamicConfigProperty)
+     * @see io.apicurio.common.apps.config.DynamicConfigService#getOptional(io.apicurio.common.apps.config.DynamicConfigPropertyDef)
      */
     @SuppressWarnings("unchecked")
     @Override
-    public Optional<String> getOptional(DynamicConfigProperty property) {
+    public Optional<String> getOptional(DynamicConfigPropertyDef property) {
         return getOptional(property, String.class);
     }
 
     /**
-     * @see io.apicurio.common.apps.config.DynamicConfigService#get(io.apicurio.common.apps.config.DynamicConfigProperty, java.lang.Class)
+     * @see io.apicurio.common.apps.config.DynamicConfigService#get(io.apicurio.common.apps.config.DynamicConfigPropertyDef, java.lang.Class)
      */
     @Override
     @SuppressWarnings("unchecked")
-    public <T> T get(DynamicConfigProperty<T> property, Class<T> propertyType) {
+    public <T> T get(DynamicConfigPropertyDef<T> property, Class<T> propertyType) {
         // Possibly check the tenant property cache for a value.  If found return it.
         T rval = (T) tenantPropertyCache().get(property);
 
@@ -102,28 +102,28 @@ public class DynamicConfigServiceImpl implements DynamicConfigService {
     }
 
     /**
-     * @see io.apicurio.common.apps.config.DynamicConfigService#getOptional(io.apicurio.common.apps.config.DynamicConfigProperty, java.lang.Class)
+     * @see io.apicurio.common.apps.config.DynamicConfigService#getOptional(io.apicurio.common.apps.config.DynamicConfigPropertyDef, java.lang.Class)
      */
     @Override
-    public <T> Optional<T> getOptional(DynamicConfigProperty<T> property, Class<T> propertyType) {
+    public <T> Optional<T> getOptional(DynamicConfigPropertyDef<T> property, Class<T> propertyType) {
         T rval = get(property, propertyType);
         return Optional.ofNullable(rval);
     }
 
-    public <T> T set(DynamicConfigProperty property, T newValue) {
+    public <T> T set(DynamicConfigPropertyDef property, T newValue) {
         DynamicConfigPropertyDto propertyDto = DynamicConfigPropertyDto.create(property.name(), newValue);
         configStorage.setConfigProperty(propertyDto);
         return newValue;
     }
 
     @SuppressWarnings("unchecked")
-    private Map<DynamicConfigProperty, Object> tenantPropertyCache() {
+    private Map<DynamicConfigPropertyDef, Object> tenantPropertyCache() {
         String getTenantId = tenantContext.getTenantId();
         return tenantPropertyCaches.computeIfAbsent(getTenantId, key -> {
             Map<String, Object> tenantProperties = loadTenantProperties();
-            Map<DynamicConfigProperty, Object> cache = new HashMap<>();
+            Map<DynamicConfigPropertyDef, Object> cache = new HashMap<>();
             tenantProperties.forEach((k,v) -> {
-                DynamicConfigProperty property = new DynamicConfigProperty(k, v);
+                DynamicConfigPropertyDef property = new DynamicConfigPropertyDef(k, v);
                 if (property != null) {
                     cache.put(property, v);
                 }

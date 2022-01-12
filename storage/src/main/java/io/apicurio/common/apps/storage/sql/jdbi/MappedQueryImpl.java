@@ -44,7 +44,7 @@ public class MappedQueryImpl<T> implements MappedQuery<T>, Closeable {
      * Constructor.
      * @param statement a SQL prepared statement
      * @param mapper a row mapper
-     * @throws SQLException
+     * @throws SQLException if a SQL error is detected
      */
     public MappedQueryImpl(PreparedStatement statement, RowMapper<T> mapper) throws SQLException {
         this.statement = statement;

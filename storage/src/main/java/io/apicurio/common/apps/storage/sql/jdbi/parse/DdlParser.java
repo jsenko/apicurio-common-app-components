@@ -53,7 +53,7 @@ public class DdlParser {
     /**
      * @param ddlStream a DDL input stream
      * @return a parsed set of SQL statements
-     * @throws IOException
+     * @throws IOException on an IO error
      */
     public List<String> parse(InputStream ddlStream) throws IOException {
         List<String> rval = new LinkedList<>();

@@ -16,67 +16,31 @@
 
 package io.apicurio.common.apps.config;
 
-import java.util.Objects;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
+
+import javax.enterprise.util.Nonbinding;
+import javax.inject.Qualifier;
 
 /**
  * @author eric.wittmann@gmail.com
  */
-public class DynamicConfigProperty<T> {
+@Qualifier
+@Documented
+@Retention(RUNTIME)
+@Target({ElementType.FIELD, ElementType.METHOD})
+public @interface DynamicConfigProperty {
 
-    private final String name;
-    private final T defaultValue;
+    final static String UNCONFIGURED_VALUE = "io.apicurio.common.apps.config.UNCONFIGURED_VALUE";
 
-    /**
-     * Constructor.
-     * @param name the config property name
-     * @param defaultValue the default value of the config property
-     */
-    public DynamicConfigProperty(String name, T defaultValue) {
-        this.name = name;
-        this.defaultValue = defaultValue;
-    }
+    @Nonbinding
+    String name() default "";
 
-    public T defaultValue() {
-        return defaultValue;
-    }
-
-    /**
-     * @return the name
-     */
-    public String name() {
-        return name;
-    }
-
-    /**
-     * @see java.lang.Object#toString()
-     */
-    @Override
-    public String toString() {
-        return "DynamicConfigProperty [name=" + name + "]";
-    }
-
-    /**
-     * @see java.lang.Object#hashCode()
-     */
-    @Override
-    public int hashCode() {
-        return Objects.hash(name);
-    }
-
-    /**
-     * @see java.lang.Object#equals(java.lang.Object)
-     */
-    @SuppressWarnings("rawtypes")
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        DynamicConfigProperty other = (DynamicConfigProperty) obj;
-        return Objects.equals(name, other.name);
-    }
+    @Nonbinding
+    String defaultValue() default UNCONFIGURED_VALUE;
 
 }

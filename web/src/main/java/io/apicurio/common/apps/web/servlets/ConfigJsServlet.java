@@ -89,6 +89,7 @@ public abstract class ConfigJsServlet extends HttpServlet {
     /**
      * Generates a URL that the caller can use to access the REST API.
      * @param request the HTTP request
+     * @return the generated API URL
      */
     protected String generateApiUrl(HttpServletRequest request) {
         try {
