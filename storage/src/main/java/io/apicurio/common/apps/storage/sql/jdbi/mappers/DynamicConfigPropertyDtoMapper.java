@@ -41,12 +41,11 @@ public class DynamicConfigPropertyDtoMapper implements RowMapper<DynamicConfigPr
     @Override
     public DynamicConfigPropertyDto map(ResultSet rs) throws SQLException {
         String name = rs.getString("pname");
-        String type = rs.getString("ptype");
         String value = rs.getString("pvalue");
         if (value == null) {
             return null;
         } else {
-            return new DynamicConfigPropertyDto(name, value, type);
+            return new DynamicConfigPropertyDto(name, value);
         }
     }
 

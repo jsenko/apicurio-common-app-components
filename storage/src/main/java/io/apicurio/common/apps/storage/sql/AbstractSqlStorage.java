@@ -22,6 +22,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
+import javax.transaction.Transactional;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.slf4j.Logger;
@@ -232,6 +233,7 @@ public abstract class AbstractSqlStorage<S extends CommonSqlStatements> implemen
      * @see io.apicurio.common.apps.config.DynamicConfigStorage#setConfigProperty(io.apicurio.common.apps.config.DynamicConfigPropertyDto)
      */
     @Override
+    @Transactional
     public void setConfigProperty(DynamicConfigPropertyDto property) {
         log.debug("Setting a config property with name: {}  and value: {}", property.getName(), property.getValue());
         handles.withHandle( handle -> {
@@ -250,11 +252,29 @@ public abstract class AbstractSqlStorage<S extends CommonSqlStatements> implemen
             handle.createUpdate(sql)
                   .bind(0, tenantContext.getTenantId())
                   .bind(1, propertyName)
-                  .bind(2, property.getType())
-                  .bind(3, propertyValue)
-                  .bind(4, java.lang.System.currentTimeMillis())
+                  .bind(2, propertyValue)
+                  .bind(3, java.lang.System.currentTimeMillis())
                   .execute();
 
+            return null;
+        });
+    }
+
+    /**
+     * @see io.apicurio.common.apps.config.DynamicConfigStorage#deleteConfigProperty(java.lang.String)
+     */
+    @Override
+    @Transactional
+    public void deleteConfigProperty(String propertyName) {
+        handles.withHandle(handle -> {
+            String sql = sqlStatements.deleteConfigProperty();
+            int rows = handle.createUpdate(sql)
+                    .bind(0, tenantContext.getTenantId())
+                    .bind(1, propertyName)
+                    .execute();
+            if (rows == 0) {
+                throw new NotFoundException("Property value not currently set: " + propertyName);
+            }
             return null;
         });
     }

@@ -150,7 +150,7 @@ public abstract class AbstractCommonSqlStatements implements CommonSqlStatements
      */
     @Override
     public String insertConfigProperty() {
-        return "INSERT INTO config (tenantId, pname, ptype, pvalue, modifiedOn) VALUES (?, ?, ?, ?, ?)";
+        return "INSERT INTO config (tenantId, pname, pvalue, modifiedOn) VALUES (?, ?, ?, ?)";
     }
 
     /**
