@@ -16,17 +16,22 @@
 
 package io.apicurio.common.apps.config;
 
-import java.util.Optional;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
+
+import javax.inject.Qualifier;
 
 /**
  * @author eric.wittmann@gmail.com
  */
-@SuppressWarnings("rawtypes")
-public interface DynamicConfigService {
-
-    public String get(DynamicConfigPropertyDef property);
-    public <T> T get(DynamicConfigPropertyDef<T> property, Class<T> propertyType);
-    public Optional<String> getOptional(DynamicConfigPropertyDef property);
-    public <T> Optional<T> getOptional(DynamicConfigPropertyDef<T> property, Class<T> propertyType);
+@Qualifier
+@Documented
+@Retention(RUNTIME)
+@Target({ElementType.FIELD, ElementType.METHOD})
+public @interface Dynamic {
 
 }

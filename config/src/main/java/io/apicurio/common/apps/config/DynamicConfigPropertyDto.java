@@ -23,17 +23,8 @@ import java.util.Objects;
  */
 public class DynamicConfigPropertyDto {
 
-    public static <T> DynamicConfigPropertyDto create(String name, T value) {
-        if (value == null) {
-            return new DynamicConfigPropertyDto(name, null, String.class.getName());
-        } else {
-            return new DynamicConfigPropertyDto(name, value.toString(), value.getClass().getName());
-        }
-    }
-
     private String name;
     private String value;
-    private String type;
 
     /**
      * Constructor.
@@ -45,13 +36,11 @@ public class DynamicConfigPropertyDto {
      * Constructor.
      * @param name the name of the property
      * @param value the value of the property
-     * @param type the property type
      */
-    public DynamicConfigPropertyDto(String name, String value, String type) {
+    public DynamicConfigPropertyDto(String name, String value) {
         super();
         this.name = name;
         this.value = value;
-        this.type = type;
     }
 
     /**
@@ -83,25 +72,11 @@ public class DynamicConfigPropertyDto {
     }
 
     /**
-     * @return the type
-     */
-    public String getType() {
-        return type;
-    }
-
-    /**
-     * @param type the type to set
-     */
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    /**
      * @see java.lang.Object#toString()
      */
     @Override
     public String toString() {
-        return "DynamicConfigPropertyDto [name=" + name + ", value=" + value + ", type=" + type + "]";
+        return "DynamicConfigPropertyDto [name=" + name + ", value=" + value + "]";
     }
 
     /**
@@ -109,7 +84,7 @@ public class DynamicConfigPropertyDto {
      */
     @Override
     public int hashCode() {
-        return Objects.hash(name, type, value);
+        return Objects.hash(name, value);
     }
 
     /**
@@ -124,8 +99,7 @@ public class DynamicConfigPropertyDto {
         if (getClass() != obj.getClass())
             return false;
         DynamicConfigPropertyDto other = (DynamicConfigPropertyDto) obj;
-        return Objects.equals(name, other.name) && Objects.equals(type, other.type)
-                && Objects.equals(value, other.value);
+        return Objects.equals(name, other.name) && Objects.equals(value, other.value);
     }
 
 }

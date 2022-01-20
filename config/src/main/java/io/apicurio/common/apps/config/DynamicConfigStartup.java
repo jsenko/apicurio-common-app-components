@@ -16,31 +16,22 @@
 
 package io.apicurio.common.apps.config;
 
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.event.Observes;
+import javax.inject.Inject;
 
-import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
-
-import javax.enterprise.util.Nonbinding;
-import javax.inject.Qualifier;
+import io.quarkus.runtime.StartupEvent;
 
 /**
  * @author eric.wittmann@gmail.com
  */
-@Qualifier
-@Documented
-@Retention(RUNTIME)
-@Target({ElementType.FIELD, ElementType.METHOD})
-public @interface DynamicConfigProperty {
+@ApplicationScoped
+public class DynamicConfigStartup {
 
-    final static String UNCONFIGURED_VALUE = "io.apicurio.common.apps.config.UNCONFIGURED_VALUE";
+    @Inject
+    DynamicConfigStorage configStorage;
 
-    @Nonbinding
-    String name() default "";
-
-    @Nonbinding
-    String defaultValue() default UNCONFIGURED_VALUE;
-
+    void onStart(@Observes StartupEvent ev) {
+        DynamicConfigSource.setStorage(configStorage);
+    }
 }

@@ -24,20 +24,16 @@ import java.util.Objects;
 public class DynamicConfigPropertyDef<T> {
 
     private final String name;
-    private final T defaultValue;
+    private final Class<T> type;
 
     /**
      * Constructor.
      * @param name the config property name
      * @param defaultValue the default value of the config property
      */
-    public DynamicConfigPropertyDef(String name, T defaultValue) {
+    public DynamicConfigPropertyDef(String name, Class<T> type) {
         this.name = name;
-        this.defaultValue = defaultValue;
-    }
-
-    public T defaultValue() {
-        return defaultValue;
+        this.type = type;
     }
 
     /**
@@ -45,6 +41,13 @@ public class DynamicConfigPropertyDef<T> {
      */
     public String name() {
         return name;
+    }
+
+    /**
+     * @return the type
+     */
+    public Class<T> type() {
+        return type;
     }
 
     /**

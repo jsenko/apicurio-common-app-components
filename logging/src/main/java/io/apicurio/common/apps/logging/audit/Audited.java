@@ -50,6 +50,7 @@ public @interface Audited {
      * 2. Key under which the value of the parameter should be recorded.
      *
      * There can be more than one such pair.
+     * @return the array of parameters to extract
      */
     @Nonbinding
     String[] extractParameters() default {};

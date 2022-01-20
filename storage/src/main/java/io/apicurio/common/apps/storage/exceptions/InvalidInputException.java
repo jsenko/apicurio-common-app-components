@@ -19,22 +19,22 @@ package io.apicurio.common.apps.storage.exceptions;
 /**
  * @author eric.wittmann@gmail.com
  */
-public class NotFoundException extends StorageException {
+public class InvalidInputException extends StorageException {
 
-    private static final long serialVersionUID = 7134307797211927863L;
+    private static final long serialVersionUID = -5590501959366090916L;
 
-    public NotFoundException() {
+    public InvalidInputException() {
     }
 
-    public NotFoundException(String message) {
+    public InvalidInputException(String message) {
         super(message);
     }
 
-    public NotFoundException(Throwable cause) {
-        super("Resource not found.", cause);
+    public InvalidInputException(Throwable cause) {
+        super("Input not valid.", cause);
     }
 
-    public NotFoundException(String reason, Throwable cause) {
+    public InvalidInputException(String reason, Throwable cause) {
         super(reason, cause);
     }
 

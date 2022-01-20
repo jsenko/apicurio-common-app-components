@@ -28,6 +28,8 @@ public interface DynamicConfigStorage {
 
     public void setConfigProperty(DynamicConfigPropertyDto propertyDto);
 
+    public void deleteConfigProperty(String propertyName);
+
     public List<String> getTenantsWithStaleConfigProperties(Instant lastRefresh);
 
     public List<DynamicConfigPropertyDto> getConfigProperties();

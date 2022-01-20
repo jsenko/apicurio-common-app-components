@@ -88,6 +88,7 @@ public class IoUtil {
      *
      * @param stream the stream
      * @param closeStream whether to close the stream when done
+     * @return the stream as an array of bytes
      */
     public static byte[] toBytes(InputStream stream, boolean closeStream) {
         try {
