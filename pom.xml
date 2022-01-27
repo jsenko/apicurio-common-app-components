@@ -28,6 +28,16 @@
             </roles>
             <timezone>-5</timezone>
         </developer>
+        <developer>
+            <name>Carles Arnal</name>
+            <id>carlesarnal</id>
+            <email>carles.arnal@redhat.com</email>
+            <organization>Red Hat</organization>
+            <roles>
+                <role>Developer</role>
+            </roles>
+            <timezone>+1</timezone>
+        </developer>
     </developers>
 
     <licenses>
@@ -60,6 +70,7 @@
         <module>storage</module>
         <module>mt</module>
         <module>test</module>
+        <module>config-index</module>
     </modules>
 
     <properties>
