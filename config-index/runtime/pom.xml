@@ -4,10 +4,10 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>io.apicurio</groupId>
-    <artifactId>config-index-parent</artifactId>
+    <artifactId>apicurio-common-app-components-config-index-parent</artifactId>
     <version>0.1.2-SNAPSHOT</version>
   </parent>
-  <artifactId>config-index</artifactId>
+  <artifactId>apicurio-common-app-components-config-index</artifactId>
   <name>Config Index - Runtime</name>
   <dependencies>
     <dependency>

@@ -26,6 +26,11 @@
             <artifactId>apicurio-common-app-components-mt</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>config-index</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>io.quarkus</groupId>

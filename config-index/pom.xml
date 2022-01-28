@@ -7,7 +7,7 @@
     <version>0.1.2-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
-  <artifactId>config-index-parent</artifactId>
+  <artifactId>apicurio-common-app-components-config-index-parent</artifactId>
   <version>0.1.2-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>Config Index - Parent</name>

@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>io.apicurio</groupId>
-    <artifactId>config-index-parent</artifactId>
+    <artifactId>apicurio-common-app-components-config-index-parent</artifactId>
     <version>0.1.2-SNAPSHOT</version>
   </parent>
   <artifactId>config-index-integration-tests</artifactId>
@@ -12,11 +12,11 @@
   <dependencies>
     <dependency>
       <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-resteasy</artifactId>
+      <artifactId>quarkus-resteasy-jackson</artifactId>
     </dependency>
     <dependency>
       <groupId>io.apicurio</groupId>
-      <artifactId>config-index</artifactId>
+      <artifactId>apicurio-common-app-components-config-index</artifactId>
       <version>0.1.2-SNAPSHOT</version>
     </dependency>
     <dependency>
@@ -26,7 +26,27 @@
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-undertow</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-jackson</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-scheduler</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
       <artifactId>quarkus-junit5</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-oidc</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>

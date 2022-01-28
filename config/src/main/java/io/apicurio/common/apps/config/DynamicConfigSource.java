@@ -16,6 +16,7 @@
 
 package io.apicurio.common.apps.config;
 
+import java.util.Collections;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -24,7 +25,7 @@ import org.eclipse.microprofile.config.spi.ConfigSource;
 /**
  * A microprofile-config configsource.  This class uses the dynamic config storage to
  * read/write configuration properties to, for example, a database.
- *
+ * <p>
  * TODO cache properties.  this would need to be multi-tenant aware?
  *
  * @author eric.wittmann@gmail.com
@@ -32,6 +33,7 @@ import org.eclipse.microprofile.config.spi.ConfigSource;
 public class DynamicConfigSource implements ConfigSource {
 
     private static DynamicConfigStorage storage;
+
     public static void setStorage(DynamicConfigStorage configStorage) {
         storage = configStorage;
     }
@@ -46,7 +48,12 @@ public class DynamicConfigSource implements ConfigSource {
      */
     @Override
     public Set<String> getPropertyNames() {
-        return storage.getConfigProperties().stream().map(cp -> cp.getName()).collect(Collectors.toSet());
+        if (storage != null) {
+            return storage.getConfigProperties().stream().map(cp -> cp.getName()).collect(Collectors.toSet());
+        } else {
+            //Not initialized yet
+            return Collections.emptySet();
+        }
     }
 
     /**
@@ -54,7 +61,12 @@ public class DynamicConfigSource implements ConfigSource {
      */
     @Override
     public String getValue(String propertyName) {
-        return storage.getConfigProperty(propertyName).getValue();
+        if (storage != null) {
+            return storage.getConfigProperty(propertyName).getValue();
+        } else {
+            //Not initialized yet
+            return null;
+        }
     }
 
     /**
