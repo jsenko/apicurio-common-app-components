@@ -16,6 +16,8 @@
 
 package io.apicurio.common.apps.config;
 
+import java.util.Collections;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -31,9 +33,9 @@ import org.eclipse.microprofile.config.spi.ConfigSource;
  */
 public class DynamicConfigSource implements ConfigSource {
 
-    private static DynamicConfigStorage storage;
+    private static Optional<DynamicConfigStorage> storage = Optional.empty();
     public static void setStorage(DynamicConfigStorage configStorage) {
-        storage = configStorage;
+        storage = Optional.of(configStorage);
     }
 
     @Override
@@ -46,7 +48,11 @@ public class DynamicConfigSource implements ConfigSource {
      */
     @Override
     public Set<String> getPropertyNames() {
-        return storage.getConfigProperties().stream().map(cp -> cp.getName()).collect(Collectors.toSet());
+        if (storage.isPresent()) {
+            return storage.get().getConfigProperties().stream().map(cp -> cp.getName()).collect(Collectors.toSet());
+        } else {
+            return Collections.emptySet();
+        }
     }
 
     /**
@@ -54,7 +60,11 @@ public class DynamicConfigSource implements ConfigSource {
      */
     @Override
     public String getValue(String propertyName) {
-        return storage.getConfigProperty(propertyName).getValue();
+        if (storage.isPresent()) {
+            return storage.get().getConfigProperty(propertyName).getValue();
+        } else {
+            return null;
+        }
     }
 
     /**
