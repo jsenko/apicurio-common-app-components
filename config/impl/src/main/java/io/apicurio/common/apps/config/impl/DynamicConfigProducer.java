@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.apicurio.common.apps.config;
+package io.apicurio.common.apps.config.impl;
 
 import java.util.function.Supplier;
 
@@ -25,6 +25,7 @@ import javax.enterprise.inject.spi.InjectionPoint;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
+import io.apicurio.common.apps.config.Dynamic;
 import io.smallrye.config.inject.ConfigProducer;
 import io.smallrye.config.inject.ConfigProducerUtil;
 

@@ -1,8 +1,17 @@
 package apicurio.common.app.components.config.index.deployment;
 
-import apicurio.common.app.components.config.index.DynamicConfigPropertyDto;
-import apicurio.common.app.components.config.index.DynamicPropertiesInfo;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.eclipse.microprofile.config.inject.ConfigProperty;
+import org.jboss.jandex.AnnotationInstance;
+import org.jboss.jandex.DotName;
+import org.jboss.jandex.Type;
+
+import apicurio.common.app.components.config.index.DynamicConfigPropertyIndex;
 import apicurio.common.app.components.config.index.DynamicPropertiesInfoRecorder;
+import io.apicurio.common.apps.config.Dynamic;
+import io.apicurio.common.apps.config.DynamicConfigPropertyDef;
 import io.quarkus.arc.deployment.BeanDiscoveryFinishedBuildItem;
 import io.quarkus.arc.deployment.SyntheticBeanBuildItem;
 import io.quarkus.arc.processor.InjectionPointInfo;
@@ -11,32 +20,34 @@ import io.quarkus.deployment.annotations.BuildStep;
 import io.quarkus.deployment.annotations.ExecutionTime;
 import io.quarkus.deployment.annotations.Record;
 import io.quarkus.runtime.RuntimeValue;
-import org.eclipse.microprofile.config.inject.ConfigProperty;
-import org.jboss.jandex.DotName;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 class ConfigIndexProcessor {
 
     @BuildStep
     @Record(ExecutionTime.RUNTIME_INIT)
     void syntheticBean(DynamicPropertiesInfoRecorder recorder, BeanDiscoveryFinishedBuildItem beanDiscovery, BuildProducer<SyntheticBeanBuildItem> syntheticBeans) {
-
-        List<DynamicConfigPropertyDto> dynamicProperties = beanDiscovery.getInjectionPoints()
+        List<DynamicConfigPropertyDef> dynamicProperties = beanDiscovery.getInjectionPoints()
                 .stream()
                 .filter(ConfigIndexProcessor::isDynamicConfigProperty)
                 .map(injectionPointInfo -> {
-                    final DynamicConfigPropertyDto dynamicConfigPropertyDto = new DynamicConfigPropertyDto();
-                    dynamicConfigPropertyDto.setName(injectionPointInfo.getTargetInfo());
-                    return dynamicConfigPropertyDto;
+                    try {
+                        AnnotationInstance ai = injectionPointInfo.getRequiredQualifier(DotName.createSimple(ConfigProperty.class.getName()));
+                        Type supplierType = injectionPointInfo.getRequiredType();
+                        Type actualType = supplierType.asParameterizedType().arguments().get(0);
+
+                        final String propertyName = ai.value("name").asString();
+                        final Class<?> propertyType = Class.forName(actualType.name().toString());
+                        return new DynamicConfigPropertyDef(propertyName, propertyType);
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
                 })
                 .collect(Collectors.toList());
 
-        final RuntimeValue<DynamicPropertiesInfo> dynamicPropertiesHolderRuntimeValue = recorder.initializePropertiesInfo(
+        final RuntimeValue<DynamicConfigPropertyIndex> dynamicPropertiesHolderRuntimeValue = recorder.initializePropertiesInfo(
                 dynamicProperties);
 
-        syntheticBeans.produce(SyntheticBeanBuildItem.configure(DynamicPropertiesInfo.class)
+        syntheticBeans.produce(SyntheticBeanBuildItem.configure(DynamicConfigPropertyIndex.class)
                 .runtimeValue(dynamicPropertiesHolderRuntimeValue)
                 .unremovable()
                 .setRuntimeInit()
@@ -44,6 +55,7 @@ class ConfigIndexProcessor {
     }
 
     private static boolean isDynamicConfigProperty(InjectionPointInfo injectionPointInfo) {
-        return injectionPointInfo.getRequiredQualifier(DotName.createSimple(ConfigProperty.class.getName())) != null && injectionPointInfo.getTarget().asField().annotation(DotName.createSimple("io.apicurio.common.apps.config.Dynamic")) != null;
+        return injectionPointInfo.getRequiredQualifier(DotName.createSimple(ConfigProperty.class.getName())) != null &&
+                injectionPointInfo.getTarget().asField().annotation(DotName.createSimple(Dynamic.class.getName())) != null;
     }
 }

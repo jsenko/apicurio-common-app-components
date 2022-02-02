@@ -16,7 +16,7 @@
  */
 package apicurio.common.app.components.config.index.it;
 
-import apicurio.common.app.components.config.index.DynamicPropertiesInfo;
+import apicurio.common.app.components.config.index.DynamicConfigPropertyIndex;
 import io.apicurio.common.apps.config.Dynamic;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
@@ -34,7 +34,7 @@ public class ConfigIndexResource {
     // add some rest methods here
 
     @Inject
-    DynamicPropertiesInfo dynamicPropertiesHolder;
+    DynamicConfigPropertyIndex dynamicPropertyIndex;
 
     @Dynamic
     @ConfigProperty(name = "app.properties.dynamic.string", defaultValue = "_DEFAULT_")
@@ -52,10 +52,12 @@ public class ConfigIndexResource {
     @ConfigProperty(name = "app.properties.dynamic.bool", defaultValue = "false")
     Supplier<Boolean> dynamicBool;
 
+    @ConfigProperty(name = "app.properties.static.string", defaultValue = "default-value")
+    String staticString;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public DynamicPropertiesInfo getDynamicPropertiesHolder() {
-        return dynamicPropertiesHolder;
+    public DynamicConfigPropertyIndex getDynamicPropertyIndex() {
+        return dynamicPropertyIndex;
     }
 }

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.apicurio.common.apps.config;
+package io.apicurio.common.apps.config.impl;
 
 import java.util.Collections;
 import java.util.Optional;
@@ -22,6 +22,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.eclipse.microprofile.config.spi.ConfigSource;
+
+import io.apicurio.common.apps.config.DynamicConfigStorage;
 
 /**
  * A microprofile-config configsource.  This class uses the dynamic config storage to

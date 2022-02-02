@@ -14,12 +14,13 @@
  * limitations under the License.
  */
 
-package io.apicurio.common.apps.config;
+package io.apicurio.common.apps.config.impl;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
+import io.apicurio.common.apps.config.DynamicConfigStorage;
 import io.quarkus.runtime.Startup;
 
 /**

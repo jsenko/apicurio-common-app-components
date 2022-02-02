@@ -14,35 +14,33 @@
  * limitations under the License.
  */
 
-package apicurio.common.app.components.config.index;
+package io.apicurio.common.apps.config;
 
-import java.lang.reflect.Type;
 import java.util.Objects;
 
 /**
  * @author eric.wittmann@gmail.com
  */
-public class DynamicConfigPropertyDto {
+@SuppressWarnings("rawtypes")
+public class DynamicConfigPropertyDef {
 
     private String name;
-    private Type requiredType;
+    private Class type;
 
     /**
      * Constructor.
      */
-    public DynamicConfigPropertyDto() {
+    public DynamicConfigPropertyDef() {
     }
 
     /**
      * Constructor.
-     *
-     * @param name         the name of the property
-     * @param requiredType the value of the requiredType
+     * @param name the config property name
+     * @param defaultValue the default value of the config property
      */
-    public DynamicConfigPropertyDto(String name, Type requiredType) {
-        super();
-        this.name = name;
-        this.requiredType = requiredType;
+    public DynamicConfigPropertyDef(String name, Class type) {
+        this.setName(name);
+        this.setType(type);
     }
 
     /**
@@ -60,37 +58,29 @@ public class DynamicConfigPropertyDto {
     }
 
     /**
-     * @return the value
+     * @return the type
      */
-    public Type getRequiredType() {
-        return requiredType;
+    public Class getType() {
+        return type;
     }
 
     /**
-     * @param value the requiredType to set
+     * @param type the type to set
      */
-    public void setRequiredType(Type value) {
-        this.requiredType = requiredType;
+    public void setType(Class type) {
+        this.type = type;
     }
 
     /**
-     * @see Object#toString()
-     */
-    @Override
-    public String toString() {
-        return "DynamicConfigPropertyDto [name=" + name + ", requiredType=" + requiredType + "]";
-    }
-
-    /**
-     * @see Object#hashCode()
+     * @see java.lang.Object#hashCode()
      */
     @Override
     public int hashCode() {
-        return Objects.hash(name, requiredType);
+        return Objects.hash(getName());
     }
 
     /**
-     * @see Object#equals(Object)
+     * @see java.lang.Object#equals(java.lang.Object)
      */
     @Override
     public boolean equals(Object obj) {
@@ -100,8 +90,16 @@ public class DynamicConfigPropertyDto {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        DynamicConfigPropertyDto other = (DynamicConfigPropertyDto) obj;
-        return Objects.equals(name, other.name) && Objects.equals(requiredType, other.requiredType);
+        DynamicConfigPropertyDef other = (DynamicConfigPropertyDef) obj;
+        return Objects.equals(getName(), other.getName());
+    }
+
+    /**
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+        return "DynamicConfigPropertyDef [name=" + name + ", type=" + type + "]";
     }
 
 }
