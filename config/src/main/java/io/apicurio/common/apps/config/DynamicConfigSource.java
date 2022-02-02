@@ -26,7 +26,7 @@ import org.eclipse.microprofile.config.spi.ConfigSource;
 /**
  * A microprofile-config configsource.  This class uses the dynamic config storage to
  * read/write configuration properties to, for example, a database.
- *
+ * <p>
  * TODO cache properties.  this would need to be multi-tenant aware?
  *
  * @author eric.wittmann@gmail.com
