@@ -16,22 +16,25 @@
 
 package io.apicurio.common.apps.config;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 
-import io.quarkus.runtime.StartupEvent;
+import io.quarkus.runtime.Startup;
 
 /**
  * @author eric.wittmann@gmail.com
  */
 @ApplicationScoped
+@Startup
 public class DynamicConfigStartup {
 
     @Inject
     DynamicConfigStorage configStorage;
 
-    void onStart(@Observes StartupEvent ev) {
-        DynamicConfigSource.setStorage(configStorage);
+    @PostConstruct
+    void onStart() {
+        // TODO this doesn't work in practice when the config storage itself has config properties injected :(
+//        DynamicConfigSource.setStorage(configStorage);
     }
 }

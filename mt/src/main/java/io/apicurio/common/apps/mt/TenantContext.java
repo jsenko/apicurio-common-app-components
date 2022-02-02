@@ -37,11 +37,10 @@ public class TenantContext {
 
     @PostConstruct
     void init() {
-        log.info("Constructing a TenantContext!");
     }
 
     public void setTenantInfo(TenantInfo info) {
-        log.info("Setting info: " + info + " on " + this);
+        log.debug("Setting info: " + info + " on " + this);
         this.info = info;
     }
 
