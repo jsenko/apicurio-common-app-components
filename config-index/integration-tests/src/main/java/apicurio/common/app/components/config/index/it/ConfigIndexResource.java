@@ -16,8 +16,9 @@
  */
 package apicurio.common.app.components.config.index.it;
 
-import apicurio.common.app.components.config.index.DynamicConfigPropertyIndex;
 import io.apicurio.common.apps.config.Dynamic;
+import io.apicurio.common.apps.config.DynamicConfigPropertyIndex;
+
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import javax.enterprise.context.ApplicationScoped;

@@ -5,7 +5,7 @@ import static io.restassured.RestAssured.given;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import apicurio.common.app.components.config.index.DynamicConfigPropertyIndex;
+import io.apicurio.common.apps.config.DynamicConfigPropertyIndex;
 import io.quarkus.test.junit.QuarkusTest;
 
 @QuarkusTest

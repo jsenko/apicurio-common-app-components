@@ -9,7 +9,6 @@
         <relativePath>../../pom.xml</relativePath>
     </parent>
     <artifactId>apicurio-common-app-components-config-index</artifactId>
-    <name>Config Index - Runtime</name>
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>

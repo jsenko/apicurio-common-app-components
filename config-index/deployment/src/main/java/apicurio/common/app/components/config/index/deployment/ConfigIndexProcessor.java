@@ -8,10 +8,10 @@ import org.jboss.jandex.AnnotationInstance;
 import org.jboss.jandex.DotName;
 import org.jboss.jandex.Type;
 
-import apicurio.common.app.components.config.index.DynamicConfigPropertyIndex;
 import apicurio.common.app.components.config.index.DynamicPropertiesInfoRecorder;
 import io.apicurio.common.apps.config.Dynamic;
 import io.apicurio.common.apps.config.DynamicConfigPropertyDef;
+import io.apicurio.common.apps.config.DynamicConfigPropertyIndex;
 import io.quarkus.arc.deployment.BeanDiscoveryFinishedBuildItem;
 import io.quarkus.arc.deployment.SyntheticBeanBuildItem;
 import io.quarkus.arc.processor.InjectionPointInfo;

@@ -1,9 +1,7 @@
-package apicurio.common.app.components.config.index;
+package io.apicurio.common.apps.config;
 
 
 import java.util.List;
-
-import io.apicurio.common.apps.config.DynamicConfigPropertyDef;
 
 public class DynamicConfigPropertyIndex {
 

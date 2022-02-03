@@ -9,13 +9,7 @@
         <relativePath>../../pom.xml</relativePath>
     </parent>
     <artifactId>apicurio-common-app-components-config-index-integration-tests</artifactId>
-    <name>Config Index - Integration Tests</name>
     <dependencies>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>apicurio-common-app-components-config-definitions</artifactId>
-            <version>${project.version}</version>
-        </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>apicurio-common-app-components-config</artifactId>
@@ -98,7 +92,6 @@
             <plugin>
                 <groupId>io.quarkus</groupId>
                 <artifactId>quarkus-maven-plugin</artifactId>
-                <version>${quarkus.version}</version>
                 <executions>
                     <execution>
                         <goals>

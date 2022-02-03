@@ -3,6 +3,7 @@ package apicurio.common.app.components.config.index;
 import java.util.List;
 
 import io.apicurio.common.apps.config.DynamicConfigPropertyDef;
+import io.apicurio.common.apps.config.DynamicConfigPropertyIndex;
 import io.quarkus.runtime.RuntimeValue;
 import io.quarkus.runtime.annotations.Recorder;
 
