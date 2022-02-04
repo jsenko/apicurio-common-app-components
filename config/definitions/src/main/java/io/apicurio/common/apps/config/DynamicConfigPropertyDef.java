@@ -72,6 +72,28 @@ public class DynamicConfigPropertyDef {
     }
 
     /**
+     * Returns true if the given value is valid for this dynamic property.
+     * @param value the value to test
+     * @return true if the value is valid
+     */
+    public boolean isValidValue(String value) {
+        try {
+            if (this.getType() == Long.class) {
+                Long.parseLong(value);
+            }
+            if (this.getType() == Integer.class) {
+                Integer.parseInt(value);
+            }
+            if (this.getType() == Boolean.class) {
+                Boolean.parseBoolean(value);
+            }
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    /**
      * @see java.lang.Object#hashCode()
      */
     @Override

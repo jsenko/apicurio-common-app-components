@@ -23,13 +23,14 @@ import java.util.stream.Collectors;
 
 import org.eclipse.microprofile.config.spi.ConfigSource;
 
+import io.apicurio.common.apps.config.DynamicConfigPropertyIndex;
 import io.apicurio.common.apps.config.DynamicConfigStorage;
 
 /**
  * A microprofile-config configsource.  This class uses the dynamic config storage to
  * read/write configuration properties to, for example, a database.
  * <p>
- * TODO cache properties.  this would need to be multi-tenant aware?
+ * TODO cache properties.  this would need to be multi-tenant aware?  probably should be implemented in the storage layer
  *
  * @author eric.wittmann@gmail.com
  */
@@ -38,6 +39,10 @@ public class DynamicConfigSource implements ConfigSource {
     private static Optional<DynamicConfigStorage> storage = Optional.empty();
     public static void setStorage(DynamicConfigStorage configStorage) {
         storage = Optional.of(configStorage);
+    }
+    private static Optional<DynamicConfigPropertyIndex> configIndex = Optional.empty();
+    public static void setConfigurationIndex(DynamicConfigPropertyIndex index) {
+        configIndex = Optional.of(index);
     }
 
     @Override
@@ -62,7 +67,7 @@ public class DynamicConfigSource implements ConfigSource {
      */
     @Override
     public String getValue(String propertyName) {
-        if (storage.isPresent()) {
+        if (configIndex.isPresent() && configIndex.get().hasProperty(propertyName) && storage.isPresent()) {
             return storage.get().getConfigProperty(propertyName).getValue();
         } else {
             return null;

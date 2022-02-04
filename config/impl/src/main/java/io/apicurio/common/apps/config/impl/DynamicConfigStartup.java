@@ -20,6 +20,7 @@ import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
+import io.apicurio.common.apps.config.DynamicConfigPropertyIndex;
 import io.apicurio.common.apps.config.DynamicConfigStorage;
 import io.quarkus.runtime.Startup;
 
@@ -32,10 +33,12 @@ public class DynamicConfigStartup {
 
     @Inject
     DynamicConfigStorage configStorage;
+    @Inject
+    DynamicConfigPropertyIndex configIndex;
 
     @PostConstruct
     void onStart() {
-        // TODO this doesn't work in practice when the config storage itself has config properties injected :(
-//        DynamicConfigSource.setStorage(configStorage);
+        DynamicConfigSource.setStorage(configStorage);
+        DynamicConfigSource.setConfigurationIndex(configIndex);
     }
 }
