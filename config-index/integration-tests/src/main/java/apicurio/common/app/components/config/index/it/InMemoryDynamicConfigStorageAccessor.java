@@ -14,31 +14,29 @@
  * limitations under the License.
  */
 
-package io.apicurio.common.apps.config;
+package apicurio.common.app.components.config.index.it;
 
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 
-import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
-
-import javax.enterprise.util.Nonbinding;
-import javax.inject.Qualifier;
+import io.apicurio.common.apps.config.DynamicConfigStorage;
+import io.apicurio.common.apps.config.DynamicConfigStorageAccessor;
 
 /**
  * @author eric.wittmann@gmail.com
  */
-@Qualifier
-@Documented
-@Retention(RUNTIME)
-@Target({ElementType.FIELD, ElementType.METHOD})
-public @interface Dynamic {
+@ApplicationScoped
+public class InMemoryDynamicConfigStorageAccessor implements DynamicConfigStorageAccessor {
 
-    @Nonbinding
-    String label() default "";
+    @Inject
+    InMemoryDynamicConfigStorage storage;
 
-    @Nonbinding
-    String description() default "";
+    /**
+     * @see io.apicurio.common.apps.config.DynamicConfigStorageAccessor#getConfigStorage()
+     */
+    @Override
+    public DynamicConfigStorage getConfigStorage() {
+        return storage;
+    }
 
 }

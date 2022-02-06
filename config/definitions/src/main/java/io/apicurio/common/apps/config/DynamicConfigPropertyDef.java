@@ -26,6 +26,9 @@ public class DynamicConfigPropertyDef {
 
     private String name;
     private Class type;
+    private String defaultValue;
+    private String label;
+    private String description;
 
     /**
      * Constructor.
@@ -36,11 +39,13 @@ public class DynamicConfigPropertyDef {
     /**
      * Constructor.
      * @param name the config property name
+     * @param type the property type
      * @param defaultValue the default value of the config property
      */
-    public DynamicConfigPropertyDef(String name, Class type) {
+    public DynamicConfigPropertyDef(String name, Class type, String defaultValue) {
         this.setName(name);
         this.setType(type);
+        this.setDefaultValue(defaultValue);
     }
 
     /**
@@ -77,6 +82,7 @@ public class DynamicConfigPropertyDef {
      * @return true if the value is valid
      */
     public boolean isValidValue(String value) {
+        // TODO this is very rudimentary.  We should try to leverage MP-Config if possible to validate values.
         try {
             if (this.getType() == Long.class) {
                 Long.parseLong(value);
@@ -85,7 +91,9 @@ public class DynamicConfigPropertyDef {
                 Integer.parseInt(value);
             }
             if (this.getType() == Boolean.class) {
-                Boolean.parseBoolean(value);
+                if (!"true".equalsIgnoreCase(value) && !"false".equalsIgnoreCase(value)) {
+                    throw new Exception("Invalid boolean value: " + value);
+                }
             }
             return true;
         } catch (Exception e) {
@@ -122,6 +130,48 @@ public class DynamicConfigPropertyDef {
     @Override
     public String toString() {
         return "DynamicConfigPropertyDef [name=" + name + ", type=" + type + "]";
+    }
+
+    /**
+     * @return the defaultValue
+     */
+    public String getDefaultValue() {
+        return defaultValue;
+    }
+
+    /**
+     * @param defaultValue the defaultValue to set
+     */
+    public void setDefaultValue(String defaultValue) {
+        this.defaultValue = defaultValue;
+    }
+
+    /**
+     * @return the label
+     */
+    public String getLabel() {
+        return label;
+    }
+
+    /**
+     * @param label the label to set
+     */
+    public void setLabel(String label) {
+        this.label = label;
+    }
+
+    /**
+     * @return the description
+     */
+    public String getDescription() {
+        return description;
+    }
+
+    /**
+     * @param description the description to set
+     */
+    public void setDescription(String description) {
+        this.description = description;
     }
 
 }

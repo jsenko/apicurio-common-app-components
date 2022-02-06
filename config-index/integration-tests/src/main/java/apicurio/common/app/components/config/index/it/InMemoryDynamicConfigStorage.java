@@ -25,7 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 
 @ApplicationScoped
-public class InMemoryConfigSource implements DynamicConfigStorage {
+public class InMemoryDynamicConfigStorage implements DynamicConfigStorage {
 
     private final HashMap<String, String> properties = new HashMap<>();
 

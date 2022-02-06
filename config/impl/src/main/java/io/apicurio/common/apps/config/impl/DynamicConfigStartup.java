@@ -21,7 +21,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
 import io.apicurio.common.apps.config.DynamicConfigPropertyIndex;
-import io.apicurio.common.apps.config.DynamicConfigStorage;
+import io.apicurio.common.apps.config.DynamicConfigStorageAccessor;
 import io.quarkus.runtime.Startup;
 
 /**
@@ -32,13 +32,13 @@ import io.quarkus.runtime.Startup;
 public class DynamicConfigStartup {
 
     @Inject
-    DynamicConfigStorage configStorage;
+    DynamicConfigStorageAccessor configStorageAccessor;
     @Inject
     DynamicConfigPropertyIndex configIndex;
 
     @PostConstruct
     void onStart() {
-        DynamicConfigSource.setStorage(configStorage);
+        DynamicConfigSource.setStorage(configStorageAccessor.getConfigStorage());
         DynamicConfigSource.setConfigurationIndex(configIndex);
     }
 }

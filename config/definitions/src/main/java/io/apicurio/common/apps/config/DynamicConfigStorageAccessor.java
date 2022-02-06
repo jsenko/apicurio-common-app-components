@@ -16,27 +16,11 @@
 
 package io.apicurio.common.apps.config;
 
-import java.time.Instant;
-import java.util.List;
-
 /**
  * @author eric.wittmann@gmail.com
  */
-public interface DynamicConfigStorage {
+public interface DynamicConfigStorageAccessor {
 
-    /**
-     * Should return the stored config property or null if not found.
-     * @param propertyName the name of a property
-     * @return the property value or null if not found
-     */
-    public DynamicConfigPropertyDto getConfigProperty(String propertyName);
-
-    public void setConfigProperty(DynamicConfigPropertyDto propertyDto);
-
-    public void deleteConfigProperty(String propertyName);
-
-    public List<String> getTenantsWithStaleConfigProperties(Instant lastRefresh);
-
-    public List<DynamicConfigPropertyDto> getConfigProperties();
+    public DynamicConfigStorage getConfigStorage();
 
 }

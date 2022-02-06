@@ -23,6 +23,7 @@ import java.util.stream.Collectors;
 
 import org.eclipse.microprofile.config.spi.ConfigSource;
 
+import io.apicurio.common.apps.config.DynamicConfigPropertyDto;
 import io.apicurio.common.apps.config.DynamicConfigPropertyIndex;
 import io.apicurio.common.apps.config.DynamicConfigStorage;
 
@@ -68,10 +69,12 @@ public class DynamicConfigSource implements ConfigSource {
     @Override
     public String getValue(String propertyName) {
         if (configIndex.isPresent() && configIndex.get().hasProperty(propertyName) && storage.isPresent()) {
-            return storage.get().getConfigProperty(propertyName).getValue();
-        } else {
-            return null;
+            DynamicConfigPropertyDto dto = storage.get().getConfigProperty(propertyName);
+            if (dto != null) {
+                return dto.getValue();
+            }
         }
+        return null;
     }
 
     /**

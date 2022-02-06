@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.jboss.jandex.AnnotationInstance;
+import org.jboss.jandex.AnnotationValue;
 import org.jboss.jandex.DotName;
 import org.jboss.jandex.Type;
 
@@ -53,7 +54,23 @@ class ConfigIndexProcessor {
 
                         final String propertyName = ai.value("name").asString();
                         final Class<?> propertyType = Class.forName(actualType.name().toString());
-                        return new DynamicConfigPropertyDef(propertyName, propertyType);
+                        final AnnotationValue defaultValueAV = ai.value("defaultValue");
+                        if (defaultValueAV == null) {
+                            throw new RuntimeException("Dynamic configuration property '" + propertyName + "' must have a default value.");
+                        }
+                        final String defaultValue = defaultValueAV.asString();
+                        DynamicConfigPropertyDef def = new DynamicConfigPropertyDef(propertyName, propertyType, defaultValue);
+
+                        final AnnotationValue labelAV = ai.value("label");
+                        final AnnotationValue descriptionAV = ai.value("description");
+                        if (labelAV != null) {
+                            def.setLabel(labelAV.asString());
+                        }
+                        if (descriptionAV != null) {
+                            def.setDescription(descriptionAV.asString());
+                        }
+
+                        return def;
                     } catch (Exception e) {
                         throw new RuntimeException(e);
                     }
