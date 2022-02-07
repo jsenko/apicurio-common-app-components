@@ -14,23 +14,38 @@
  * limitations under the License.
  */
 
-package io.apicurio.common.apps.config;
-
-import java.util.Set;
+package apicurio.common.app.components.config.index.it;
 
 /**
  * @author eric.wittmann@gmail.com
  */
-public interface DynamicConfigPropertyIndex {
+public class ConfigProp {
 
-    public DynamicConfigPropertyDef getProperty(String name);
+    private String name;
+    private String value;
 
-    public boolean hasProperty(String name);
+    public ConfigProp() {
+    }
 
-    public Set<String> getPropertyNames();
+    public ConfigProp(String name, String value) {
+        this.name = name;
+        this.value = value;
+    }
 
-    public boolean isAccepted(String propertyName);
+    public String getName() {
+        return name;
+    }
 
-    public Set<String> getAcceptedPropertyNames();
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
 
 }

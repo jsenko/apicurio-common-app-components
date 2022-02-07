@@ -16,21 +16,26 @@
 
 package io.apicurio.common.apps.config;
 
-import java.util.Set;
 
-/**
- * @author eric.wittmann@gmail.com
- */
-public interface DynamicConfigPropertyIndex {
+import java.util.List;
 
-    public DynamicConfigPropertyDef getProperty(String name);
+public class DynamicConfigPropertyList {
 
-    public boolean hasProperty(String name);
+    private List<DynamicConfigPropertyDef> dynamicConfigProperties;
 
-    public Set<String> getPropertyNames();
+    public DynamicConfigPropertyList() {
+    }
 
-    public boolean isAccepted(String propertyName);
+    public DynamicConfigPropertyList(List<DynamicConfigPropertyDef> dynamicConfigProperties) {
+        this.setDynamicConfigProperties(dynamicConfigProperties);
+    }
 
-    public Set<String> getAcceptedPropertyNames();
+    public List<DynamicConfigPropertyDef> getDynamicConfigProperties() {
+        return dynamicConfigProperties;
+    }
+
+    public void setDynamicConfigProperties(List<DynamicConfigPropertyDef> dynamicConfigProperties) {
+        this.dynamicConfigProperties = dynamicConfigProperties;
+    }
 
 }

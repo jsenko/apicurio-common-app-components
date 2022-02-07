@@ -41,4 +41,7 @@ public @interface Dynamic {
     @Nonbinding
     String description() default "";
 
+    @Nonbinding
+    String[] requires() default {};
+
 }

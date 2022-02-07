@@ -29,6 +29,7 @@ public class DynamicConfigPropertyDef {
     private String defaultValue;
     private String label;
     private String description;
+    private String[] requires;
 
     /**
      * Constructor.
@@ -172,6 +173,20 @@ public class DynamicConfigPropertyDef {
      */
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    /**
+     * @return the requires
+     */
+    public String[] getRequires() {
+        return requires;
+    }
+
+    /**
+     * @param requires the requires to set
+     */
+    public void setRequires(String[] requires) {
+        this.requires = requires;
     }
 
 }

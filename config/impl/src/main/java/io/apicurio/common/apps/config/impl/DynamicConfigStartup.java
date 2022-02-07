@@ -20,7 +20,6 @@ import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
-import io.apicurio.common.apps.config.DynamicConfigPropertyIndex;
 import io.apicurio.common.apps.config.DynamicConfigStorageAccessor;
 import io.quarkus.runtime.Startup;
 
@@ -34,7 +33,7 @@ public class DynamicConfigStartup {
     @Inject
     DynamicConfigStorageAccessor configStorageAccessor;
     @Inject
-    DynamicConfigPropertyIndex configIndex;
+    DynamicConfigPropertyIndexImpl configIndex;
 
     @PostConstruct
     void onStart() {

@@ -28,7 +28,7 @@ import org.jboss.jandex.Type;
 import apicurio.common.app.components.config.index.DynamicPropertiesInfoRecorder;
 import io.apicurio.common.apps.config.Dynamic;
 import io.apicurio.common.apps.config.DynamicConfigPropertyDef;
-import io.apicurio.common.apps.config.DynamicConfigPropertyIndex;
+import io.apicurio.common.apps.config.DynamicConfigPropertyList;
 import io.quarkus.arc.deployment.BeanDiscoveryFinishedBuildItem;
 import io.quarkus.arc.deployment.SyntheticBeanBuildItem;
 import io.quarkus.arc.processor.InjectionPointInfo;
@@ -48,26 +48,32 @@ class ConfigIndexProcessor {
                 .filter(ConfigIndexProcessor::isDynamicConfigProperty)
                 .map(injectionPointInfo -> {
                     try {
-                        AnnotationInstance ai = injectionPointInfo.getRequiredQualifier(DotName.createSimple(ConfigProperty.class.getName()));
+                        AnnotationInstance configPropertyAI = injectionPointInfo.getRequiredQualifier(DotName.createSimple(ConfigProperty.class.getName()));
+                        AnnotationInstance dynamicAI = injectionPointInfo.getRequiredQualifier(DotName.createSimple(Dynamic.class.getName()));
+
                         Type supplierType = injectionPointInfo.getRequiredType();
                         Type actualType = supplierType.asParameterizedType().arguments().get(0);
 
-                        final String propertyName = ai.value("name").asString();
+                        final String propertyName = configPropertyAI.value("name").asString();
                         final Class<?> propertyType = Class.forName(actualType.name().toString());
-                        final AnnotationValue defaultValueAV = ai.value("defaultValue");
+                        final AnnotationValue defaultValueAV = configPropertyAI.value("defaultValue");
                         if (defaultValueAV == null) {
                             throw new RuntimeException("Dynamic configuration property '" + propertyName + "' must have a default value.");
                         }
                         final String defaultValue = defaultValueAV.asString();
                         DynamicConfigPropertyDef def = new DynamicConfigPropertyDef(propertyName, propertyType, defaultValue);
 
-                        final AnnotationValue labelAV = ai.value("label");
-                        final AnnotationValue descriptionAV = ai.value("description");
+                        final AnnotationValue labelAV = dynamicAI.value("label");
+                        final AnnotationValue descriptionAV = dynamicAI.value("description");
+                        final AnnotationValue requiresAV = dynamicAI.value("requires");
                         if (labelAV != null) {
                             def.setLabel(labelAV.asString());
                         }
                         if (descriptionAV != null) {
                             def.setDescription(descriptionAV.asString());
+                        }
+                        if (requiresAV != null) {
+                            def.setRequires(requiresAV.asStringArray());
                         }
 
                         return def;
@@ -77,10 +83,10 @@ class ConfigIndexProcessor {
                 })
                 .collect(Collectors.toList());
 
-        final RuntimeValue<DynamicConfigPropertyIndex> dynamicPropertiesHolderRuntimeValue = recorder.initializePropertiesInfo(
+        final RuntimeValue<DynamicConfigPropertyList> dynamicPropertiesHolderRuntimeValue = recorder.initializePropertiesInfo(
                 dynamicProperties);
 
-        syntheticBeans.produce(SyntheticBeanBuildItem.configure(DynamicConfigPropertyIndex.class)
+        syntheticBeans.produce(SyntheticBeanBuildItem.configure(DynamicConfigPropertyList.class)
                 .runtimeValue(dynamicPropertiesHolderRuntimeValue)
                 .unremovable()
                 .setRuntimeInit()

@@ -16,10 +16,8 @@
 
 package apicurio.common.app.components.config.index.it;
 
-import io.apicurio.common.apps.config.Dynamic;
-import io.apicurio.common.apps.config.DynamicConfigPropertyIndex;
-
-import org.eclipse.microprofile.config.inject.ConfigProperty;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -27,7 +25,11 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import java.util.function.Supplier;
+
+import org.eclipse.microprofile.config.inject.ConfigProperty;
+
+import io.apicurio.common.apps.config.Dynamic;
+import io.apicurio.common.apps.config.DynamicConfigPropertyIndex;
 
 @Path("/config-index")
 @ApplicationScoped
@@ -46,7 +48,7 @@ public class ConfigIndexResource {
     Supplier<Integer> dynamicInt;
 
     @Dynamic
-    @ConfigProperty(name = "app.properties.dynamic.long", defaultValue = "0")
+    @ConfigProperty(name = "app.properties.dynamic.long", defaultValue = "17")
     Supplier<Long> dynamicLong;
 
     @Dynamic
@@ -58,7 +60,9 @@ public class ConfigIndexResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public DynamicConfigPropertyIndex getDynamicPropertyIndex() {
-        return dynamicPropertyIndex;
+    public ConfigProps getProperties() {
+        return new ConfigProps(dynamicPropertyIndex.getPropertyNames().stream()
+                .map(pname -> new ConfigProp(pname, dynamicPropertyIndex.getProperty(pname).getDefaultValue()))
+                .collect(Collectors.toList()));
     }
 }
