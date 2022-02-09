@@ -12,13 +12,43 @@ public class ConfigIndexResourceTest {
 
     @Test
     public void testGetDynamicConfigInfo() {
-        final ConfigProps properties = given()
-                .when().get("/config-index").as(ConfigProps.class);
+        ConfigProps allProperties = given()
+                .when().get("/config/all").as(ConfigProps.class);
+        ConfigProps acceptedProperties = given()
+                .when().get("/config/accepted").as(ConfigProps.class);
 
-        Assertions.assertTrue(properties.getProperties().size() == 4);
+        Assertions.assertTrue(allProperties.getProperties().size() == 5);
+        Assertions.assertTrue(acceptedProperties.getProperties().size() == 4);
+        Assertions.assertNotNull(allProperties.getProperty("app.properties.dynamic.long"));
+        Assertions.assertEquals("app.properties.dynamic.long", allProperties.getProperty("app.properties.dynamic.long").getName());
+        Assertions.assertEquals("17", allProperties.getProperty("app.properties.dynamic.long").getValue());
+        Assertions.assertTrue(allProperties.hasProperty("app.properties.dynamic.bool.dep"));
+        Assertions.assertFalse(acceptedProperties.hasProperty("app.properties.dynamic.bool.dep"));
+        Assertions.assertFalse(acceptedProperties.hasProperty("property.does.not.exist"));
 
-        Assertions.assertNotNull(properties.getProperty("app.properties.dynamic.long"));
-        Assertions.assertEquals("app.properties.dynamic.long", properties.getProperty("app.properties.dynamic.long").getName());
-        Assertions.assertEquals("17", properties.getProperty("app.properties.dynamic.long").getValue());
+        ConfigProp booleanProp = given()
+                .when().get("/config/all/app.properties.dynamic.bool").as(ConfigProp.class);
+        Assertions.assertEquals("false", booleanProp.getValue());
+
+        // Set the bool property to true
+        given().when().get("/config/update");
+
+        // Value should be true now
+        booleanProp = given()
+                .when().get("/config/all/app.properties.dynamic.bool").as(ConfigProp.class);
+        Assertions.assertEquals("true", booleanProp.getValue());
+
+        allProperties = given()
+                .when().get("/config/all").as(ConfigProps.class);
+        Assertions.assertTrue(allProperties.hasProperty("app.properties.dynamic.bool"));
+        Assertions.assertEquals("true", allProperties.getPropertyValue("app.properties.dynamic.bool"));
+        // Accepted properties should now have 5 items
+        acceptedProperties = given()
+                .when().get("/config/accepted").as(ConfigProps.class);
+        Assertions.assertTrue(acceptedProperties.getProperties().size() == 5);
+        Assertions.assertTrue(acceptedProperties.hasProperty("app.properties.dynamic.bool"));
+        Assertions.assertEquals("true", acceptedProperties.getPropertyValue("app.properties.dynamic.bool"));
+        Assertions.assertTrue(acceptedProperties.hasProperty("app.properties.dynamic.bool.dep"));
+        Assertions.assertFalse(acceptedProperties.hasProperty("property.does.not.exist"));
     }
 }

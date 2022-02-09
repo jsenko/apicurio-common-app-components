@@ -16,6 +16,8 @@
 
 package io.apicurio.common.apps.config.impl;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,14 +42,11 @@ import io.apicurio.common.apps.config.DynamicConfigPropertyList;
 public class DynamicConfigPropertyIndexImpl implements DynamicConfigPropertyIndex {
 
     private Map<String, DynamicConfigPropertyDef> propertyIndex;
-    private Set<String> acceptedPropertyNames;
 
     @Inject
     DynamicConfigPropertyList properties;
     @Inject
     Config config;
-
-    private boolean isFiltered;
 
     /**
      * Constructor.
@@ -58,13 +57,6 @@ public class DynamicConfigPropertyIndexImpl implements DynamicConfigPropertyInde
     @PostConstruct
     void onInit() {
         indexProperties(properties.getDynamicConfigProperties());
-    }
-
-    void filterOnAccepted() {
-        if (!isFiltered) {
-            filter();
-            isFiltered = true;
-        }
     }
 
     private Map<String, DynamicConfigPropertyDef> getPropertyIndex() {
@@ -78,17 +70,12 @@ public class DynamicConfigPropertyIndexImpl implements DynamicConfigPropertyInde
         }
     }
 
-    private void filter() {
-        this.acceptedPropertyNames = this.propertyIndex.entrySet().stream()
-                .filter(entry -> accept(entry.getValue()))
-                .map(entry -> entry.getKey()).collect(Collectors.toSet());
-    }
-
     private boolean accept(DynamicConfigPropertyDef def) {
         if (def.getRequires() == null) {
             return true;
         }
-        String[] requires = def.getRequires();
+        List<String> requires = new ArrayList<>(Arrays.asList(def.getRequires()));
+        requires.add(def.getName() + ".dynamic.allow=true");
         for (String require : requires) {
             String requiredPropertyName = require;
             String requiredPropertyValue = null;
@@ -97,7 +84,10 @@ public class DynamicConfigPropertyIndexImpl implements DynamicConfigPropertyInde
                 requiredPropertyValue = require.substring(require.indexOf("=") + 1).trim();
             }
             Optional<String> actualPropertyValue = config.getOptionalValue(requiredPropertyName, String.class);
-            if (actualPropertyValue.isEmpty() || !requiredPropertyValue.equals(actualPropertyValue.get())) {
+            if (requiredPropertyValue != null && (actualPropertyValue.isEmpty() || !requiredPropertyValue.equals(actualPropertyValue.get()))) {
+                return false;
+            }
+            if (requiredPropertyValue == null && actualPropertyValue.isEmpty()) {
                 return false;
             }
         }
@@ -133,7 +123,7 @@ public class DynamicConfigPropertyIndexImpl implements DynamicConfigPropertyInde
      */
     @Override
     public boolean isAccepted(String propertyName) {
-        return this.acceptedPropertyNames.contains(propertyName);
+        return this.getAcceptedPropertyNames().contains(propertyName);
     }
 
     /**
@@ -141,8 +131,9 @@ public class DynamicConfigPropertyIndexImpl implements DynamicConfigPropertyInde
      */
     @Override
     public Set<String> getAcceptedPropertyNames() {
-        filterOnAccepted();
-        return this.acceptedPropertyNames;
+        return this.propertyIndex.entrySet().stream()
+                .filter(entry -> accept(entry.getValue()))
+                .map(entry -> entry.getKey()).collect(Collectors.toSet());
     }
 
 }

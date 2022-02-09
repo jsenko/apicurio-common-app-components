@@ -16,22 +16,24 @@
 
 package apicurio.common.app.components.config.index.it;
 
-import io.apicurio.common.apps.config.DynamicConfigPropertyDto;
-import io.apicurio.common.apps.config.DynamicConfigStorage;
-
-import javax.enterprise.context.ApplicationScoped;
-import java.time.Instant;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import javax.enterprise.context.ApplicationScoped;
+
+import io.apicurio.common.apps.config.DynamicConfigPropertyDto;
+import io.apicurio.common.apps.config.DynamicConfigStorage;
 
 @ApplicationScoped
 public class InMemoryDynamicConfigStorage implements DynamicConfigStorage {
 
-    private final HashMap<String, String> properties = new HashMap<>();
+    private final Map<String, String> properties = new HashMap<>();
 
     @Override
     public DynamicConfigPropertyDto getConfigProperty(String propertyName) {
-        return new DynamicConfigPropertyDto(propertyName, properties.get(propertyName));
+        String value = properties.get(propertyName);
+        return new DynamicConfigPropertyDto(propertyName, value);
     }
 
     @Override
@@ -42,11 +44,6 @@ public class InMemoryDynamicConfigStorage implements DynamicConfigStorage {
     @Override
     public void deleteConfigProperty(String propertyName) {
         properties.remove(propertyName);
-    }
-
-    @Override
-    public List<String> getTenantsWithStaleConfigProperties(Instant lastRefresh) {
-        return null;
     }
 
     @Override

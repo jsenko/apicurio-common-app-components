@@ -46,7 +46,7 @@ public class DynamicConfigSource implements ConfigSource {
 
     @Override
     public int getOrdinal() {
-        return 199;
+        return 450; // Very high ordinal value:  https://quarkus.io/guides/config-reference#configuration-sources
     }
 
     /**
@@ -62,13 +62,25 @@ public class DynamicConfigSource implements ConfigSource {
      */
     @Override
     public String getValue(String propertyName) {
-        if (configIndex.isPresent() && configIndex.get().hasProperty(propertyName) && storage.isPresent()) {
-            DynamicConfigPropertyDto dto = storage.get().getConfigProperty(propertyName);
+        String pname = normalizePropertyName(propertyName);
+        if (configIndex.isPresent() && configIndex.get().hasProperty(pname) && storage.isPresent()) {
+            DynamicConfigPropertyDto dto = storage.get().getConfigProperty(pname);
             if (dto != null) {
                 return dto.getValue();
             }
         }
         return null;
+    }
+
+    private String normalizePropertyName(String propertyName) {
+        if (propertyName == null || !propertyName.startsWith("%")) {
+            return propertyName;
+        }
+        int idx = propertyName.indexOf(".");
+        if (idx >= propertyName.length()) {
+            return propertyName;
+        }
+        return propertyName.substring(idx + 1);
     }
 
     /**

@@ -49,4 +49,12 @@ public class ConfigProps {
         return null;
     }
 
+    public String getPropertyValue(String propertyName) {
+        return getProperty(propertyName).getValue();
+    }
+
+    public boolean hasProperty(String propertyName) {
+        return getProperty(propertyName) != null;
+    }
+
 }

@@ -266,6 +266,7 @@ public abstract class AbstractSqlStorage<S extends CommonSqlStatements> implemen
     @Override
     @Transactional
     public void deleteConfigProperty(String propertyName) {
+        log.debug("Deleting a config property from storage: {}", propertyName);
         handles.withHandle(handle -> {
             String sql = sqlStatements.deleteConfigProperty();
             int rows = handle.createUpdate(sql)
@@ -279,11 +280,7 @@ public abstract class AbstractSqlStorage<S extends CommonSqlStatements> implemen
         });
     }
 
-    /**
-     * @see io.apicurio.common.apps.config.DynamicConfigStorage#getTenantsWithStaleConfigProperties(java.time.Instant)
-     */
-    @Override
-    public List<String> getTenantsWithStaleConfigProperties(Instant since) {
+    protected List<String> getTenantsWithStaleConfigProperties(Instant since) {
         log.debug("Getting all tenant IDs with stale config properties.");
         return handles.withHandle( handle -> {
             String sql = sqlStatements.selectTenantIdsByConfigModifiedOn();
