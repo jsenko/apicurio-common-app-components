@@ -71,10 +71,7 @@ public class DynamicConfigPropertyIndexImpl implements DynamicConfigPropertyInde
     }
 
     private boolean accept(DynamicConfigPropertyDef def) {
-        if (def.getRequires() == null) {
-            return true;
-        }
-        List<String> requires = new ArrayList<>(Arrays.asList(def.getRequires()));
+        List<String> requires = def.getRequires() == null ? new ArrayList<>(1) : new ArrayList<>(Arrays.asList(def.getRequires()));
         requires.add(def.getName() + ".dynamic.allow=true");
         for (String require : requires) {
             String requiredPropertyName = require;
