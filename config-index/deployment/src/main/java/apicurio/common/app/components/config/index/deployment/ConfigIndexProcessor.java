@@ -94,7 +94,7 @@ class ConfigIndexProcessor {
     }
 
     private static boolean isDynamicConfigProperty(InjectionPointInfo injectionPointInfo) {
-        return injectionPointInfo.getRequiredQualifier(DotName.createSimple(ConfigProperty.class.getName())) != null &&
+        return injectionPointInfo.getRequiredQualifier(DotName.createSimple(ConfigProperty.class.getName())) != null && injectionPointInfo.isField() &&
                 injectionPointInfo.getTarget().asField().annotation(DotName.createSimple(Dynamic.class.getName())) != null;
     }
 }
