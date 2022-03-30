@@ -37,7 +37,7 @@ public abstract class AbstractSentryConfiguration {
     @ConfigProperty(name = "app.enable.sentry", defaultValue = "false")
     Boolean enableSentry;
 
-    void onStart(@Observes StartupEvent ev) throws Exception {
+    public void onStart(@Observes StartupEvent ev) throws Exception {
         if (enableSentry) {
             java.lang.System.setProperty("sentry.release", getReleaseVersion());
             //Sentry will pick its configuration from env variables
