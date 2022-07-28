@@ -39,5 +39,7 @@ public interface AuditingConstants {
     String KEY_DESCRIPTION = "description";
     String KEY_DESCRIPTION_ENCODED = "description_encoded";
     String KEY_PROPERTY_CONFIGURATION = "property_configuration";
+    String KEY_FROM_URL = "from_url";
+    String KEY_SHA = "artifact_sha";
 
 }
