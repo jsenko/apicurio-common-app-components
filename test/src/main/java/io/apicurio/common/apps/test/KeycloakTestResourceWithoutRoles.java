@@ -16,7 +16,6 @@
 
 package io.apicurio.common.apps.test;
 
-import dasniko.testcontainers.keycloak.KeycloakContainer;
 import io.quarkus.test.common.QuarkusTestResourceLifecycleManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,37 +27,34 @@ public class KeycloakTestResourceWithoutRoles implements QuarkusTestResourceLife
 
     private static final Logger log = LoggerFactory.getLogger(KeycloakTestResourceWithoutRoles.class);
 
-    private KeycloakContainer container;
+    private final JWKSMockServer server = new JWKSMockServer();
 
     @SuppressWarnings("resource")
     @Override
     public Map<String, String> start() {
-        log.info("Starting Keycloak Test Container");
+        log.info("Starting Keycloak Test Server");
 
-        container = new KeycloakContainer()
-                .withRealmImportFile("test-realm.json");
-
-        container.start();
+        server.start();
 
         Map<String, String> props = new HashMap<>();
-        props.put("app.keycloak.url", container.getAuthServerUrl());
-        props.put("app.keycloak.realm", "registry");
+        props.put("app.keycloak.url", server.authServerUrl);
+        props.put("app.keycloak.realm", "test");
         props.put("app.authn.enabled", "true");
         props.put("app.authn.client-secret", "test1");
 
         //set tenant manager properties
         props.put("tenant-manager.auth.enabled", "true");
-        props.put("tenant-manager.keycloak.url", container.getAuthServerUrl());
-        props.put("tenant-manager.keycloak.realm", "registry");
+        props.put("tenant-manager.keycloak.url", server.authServerUrl);
+        props.put("tenant-manager.keycloak.realm", "test");
         props.put("tenant-manager.authz.enabled", "true");
+        props.put("smallrye.jwt.sign.key.location", "privateKey.jwk");
 
         return props;
     }
 
     @Override
     public void stop() {
-        log.info("Stopping Keycloak Test Container");
-        container.stop();
-        container.close();
+        log.info("Stopping Keycloak Test Server");
+        server.stop();
     }
 }
