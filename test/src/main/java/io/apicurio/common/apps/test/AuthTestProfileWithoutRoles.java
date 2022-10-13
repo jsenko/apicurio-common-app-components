@@ -29,7 +29,7 @@ public class AuthTestProfileWithoutRoles implements QuarkusTestProfile {
 
     @Override
     public Map<String, String> getConfigOverrides() {
-        return Collections.emptyMap();
+        return Map.of("smallrye.jwt.sign.key.location", "privateKey.jwk");
     }
 
     @Override
