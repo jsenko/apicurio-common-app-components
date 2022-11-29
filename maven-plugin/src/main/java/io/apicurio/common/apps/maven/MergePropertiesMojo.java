@@ -63,11 +63,11 @@ public class MergePropertiesMojo extends AbstractMojo {
             if (!input.isFile() ) {
                 throw new MojoExecutionException("Invalid input file: " + input.getAbsolutePath());
             }
-            Properties inputProps = new Properties();
             try (Reader reader = new FileReader(input)) {
+                Properties inputProps = new Properties();
                 inputProps.load(reader);
                 mergedProps.putAll(inputProps);
-                getLog().info("Read all properties from input file: " + input.getName());
+                getLog().info("Read " + inputProps.size() + " properties from input file: " + input.getName());
             } catch (Throwable t) {
                 throw new MojoExecutionException("Failed to load input file: " + input.getAbsolutePath(), t);
             }
