@@ -16,14 +16,15 @@
 
 package io.apicurio.common.apps.logging.audit;
 
-import javax.enterprise.util.Nonbinding;
-import javax.interceptor.InterceptorBinding;
-import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
-
 import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
+
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
+
+import javax.enterprise.util.Nonbinding;
+import javax.interceptor.InterceptorBinding;
 
 /**
  * This annotation is processed by {@link AuditedInterceptor}
@@ -50,6 +51,15 @@ public @interface Audited {
      * 2. Key under which the value of the parameter should be recorded.
      *
      * There can be more than one such pair.
+     *
+     * Note that the position can also optionally include an additional property name.  For example
+     * you could indicate "3.title" as the position.  This will get the third parameter from the
+     * context and then look for a JavaBean property named "title".  If one exists, it will be
+     * logged.  This allows extraction of properties of complex object parameters to be added to
+     * the audit log.  So, for example, if the 2nd parameter of a method is type "MyWidget", and
+     * the "MyWidget" class has a "description" property, then you could specific "1.description" as
+     * the position.
+     *
      * @return the array of parameters to extract
      */
     @Nonbinding

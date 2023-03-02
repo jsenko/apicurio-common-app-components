@@ -31,6 +31,13 @@
         <dependency>
             <groupId>io.sentry</groupId>
             <artifactId>sentry</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        
+        <!-- Apache Commons -->
+        <dependency>
+            <groupId>commons-beanutils</groupId>
+            <artifactId>commons-beanutils</artifactId>
         </dependency>
 
         <dependency>

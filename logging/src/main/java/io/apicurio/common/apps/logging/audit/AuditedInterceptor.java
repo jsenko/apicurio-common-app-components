@@ -17,15 +17,20 @@
 package io.apicurio.common.apps.logging.audit;
 
 
-import io.quarkus.security.identity.SecurityIdentity;
+import java.lang.reflect.InvocationTargetException;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.annotation.Priority;
+import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import javax.interceptor.AroundInvoke;
 import javax.interceptor.Interceptor;
 import javax.interceptor.InvocationContext;
-import java.util.HashMap;
-import java.util.Map;
+
+import org.apache.commons.beanutils.BeanUtils;
+
+import io.quarkus.security.identity.SecurityIdentity;
 
 /**
  * Interceptor that executes around methods annotated with {@link Audited}
@@ -46,6 +51,9 @@ public class AuditedInterceptor {
     @Inject
     SecurityIdentity securityIdentity;
 
+    @Inject
+    Instance<AuditMetaDataExtractor> extractors;
+
     @AroundInvoke
     public Object auditMethod(InvocationContext context) throws Exception {
 
@@ -56,15 +64,7 @@ public class AuditedInterceptor {
             metadata.put(AuditingConstants.KEY_PRINCIPAL_ID, securityIdentity.getPrincipal().getName());
         }
 
-        final String[] annotationParams = annotation.extractParameters();
-        if (annotationParams.length > 0) {
-            for (int i = 0; i <= annotationParams.length - 2; i += 2) {
-                Object parameterValue = context.getParameters()[Integer.parseInt(annotationParams[i])];
-                if (parameterValue != null) {
-                    metadata.put(annotationParams[i + 1], parameterValue.toString());
-                }
-            }
-        }
+        extractMetaData(context, annotation, metadata);
 
         String action = annotation.action();
         if (action.isEmpty()) {
@@ -82,4 +82,64 @@ public class AuditedInterceptor {
             auditLogService.log("apicurio.audit", action, result, metadata, null);
         }
     }
+
+    /**
+     * Extracts metadata from the context based on the "extractParameters" configuration of
+     * the "Audited" annotation.
+     * @param context
+     * @param annotation
+     * @param metadata
+     */
+    protected void extractMetaData(InvocationContext context, Audited annotation, Map<String, String> metadata) {
+        final String[] annotationParams = annotation.extractParameters();
+        if (annotationParams.length > 0) {
+            for (int i = 0; i <= annotationParams.length - 2; i += 2) {
+                String position = annotationParams[i];
+                String metadataName = annotationParams[i + 1];
+
+                String propertyName = null;
+                if (position.contains(".")) {
+                    position = extractPosition(position);
+                    propertyName = extractPropertyName(position);
+                }
+                int positionInt = Integer.parseInt(position);
+
+                Object parameterValue = context.getParameters()[positionInt];
+                if (parameterValue != null && propertyName != null) {
+                    parameterValue = getPropertyValueFromParam(parameterValue, propertyName);
+                }
+                if (parameterValue != null) {
+                    metadata.put(metadataName, parameterValue.toString());
+                }
+            }
+        } else if (extractors.iterator().hasNext()) {
+            // No parameters defined on the annotation.  So try to use any configured
+            // extractors instead.  Extract metadata from the collection of params on
+            // the context.
+            for (Object parameter : context.getParameters()) {
+                for (AuditMetaDataExtractor extractor : extractors) {
+                    if (extractor.accept(parameter)) {
+                        extractor.extractMetaDataInto(parameter, metadata);
+                    }
+                }
+            }
+        }
+    }
+
+    private String extractPosition(String position) {
+        return position.split(".")[0];
+    }
+
+    private String extractPropertyName(String position) {
+        return position.split(".")[1];
+    }
+
+    private String getPropertyValueFromParam(Object parameterValue, String propertyName) {
+        try {
+            return BeanUtils.getProperty(parameterValue, propertyName);
+        } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+            return parameterValue.toString();
+        }
+    }
+
 }

@@ -38,7 +38,6 @@ import io.apicurio.rest.client.auth.OidcAuth;
 import io.apicurio.rest.client.auth.exception.AuthErrorHandler;
 import io.apicurio.rest.client.auth.exception.NotAuthorizedException;
 import io.apicurio.rest.client.spi.ApicurioHttpClient;
-import io.quarkus.oidc.AccessTokenCredential;
 import io.quarkus.oidc.runtime.BearerAuthenticationMechanism;
 import io.quarkus.oidc.runtime.OidcAuthenticationMechanism;
 import io.quarkus.security.AuthenticationFailedException;
@@ -126,8 +125,8 @@ public abstract class AppAuthenticationMechanism implements HttpAuthenticationMe
                     String jwtToken = oidcAuth.obtainAccessTokenPasswordGrant(credentialsFromContext.getLeft(), credentialsFromContext.getRight());
                     if (jwtToken != null) {
                         //If we manage to get a token from basic credentials, try to authenticate it using the fetched token using the identity provider manager
-                        return identityProviderManager
-                                .authenticate(new TokenAuthenticationRequest(new AccessTokenCredential(jwtToken, context)));
+                        context.request().headers().set("Authorization", "Bearer " + jwtToken);
+                        return oidcAuthenticationMechanism.authenticate(context, identityProviderManager);
                     }
                 }
             } else {
@@ -189,8 +188,8 @@ public abstract class AppAuthenticationMechanism implements HttpAuthenticationMe
     private Uni<SecurityIdentity> authenticateWithClientCredentials(Pair<String, String> clientCredentials, RoutingContext context, IdentityProviderManager identityProviderManager) {
         try (OidcAuth oidcAuth = new OidcAuth(httpClient, clientCredentials.getLeft(), clientCredentials.getRight())) {
             final String jwtToken = oidcAuth.authenticate();//If we manage to get a token from basic credentials, try to authenticate it using the fetched token using the identity provider manager
-            return identityProviderManager
-                    .authenticate(new TokenAuthenticationRequest(new AccessTokenCredential(jwtToken, context)));
+            context.request().headers().set("Authorization", "Bearer " + jwtToken);
+            return oidcAuthenticationMechanism.authenticate(context, identityProviderManager);
         }
     }
 }
