@@ -42,7 +42,7 @@ public class DynamicConfigProducer extends ConfigProducer {
     @Produces
     @ConfigProperty
     @Dynamic
-    protected <T> Supplier<T> produceSupplierConfigValue(InjectionPoint ip) {
+    protected <T> Supplier<T> produceSupplierConfigProperty(InjectionPoint ip) {
         return () -> ConfigProducerUtil.getValue(ip, getConfig());
     }
 }
