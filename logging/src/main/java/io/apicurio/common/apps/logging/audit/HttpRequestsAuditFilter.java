@@ -26,14 +26,17 @@ import java.util.Optional;
 import javax.annotation.Priority;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Priorities;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.container.ContainerResponseContext;
 import javax.ws.rs.container.ContainerResponseFilter;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.ext.Provider;
 
+import io.vertx.core.http.HttpServerRequest;
 import io.vertx.ext.web.RoutingContext;
 
 /**
@@ -45,8 +48,8 @@ import io.vertx.ext.web.RoutingContext;
 @ApplicationScoped
 public class HttpRequestsAuditFilter implements ContainerRequestFilter, ContainerResponseFilter {
 
-    @Inject
-    RoutingContext context;
+    @Context
+    HttpServletRequest request;
 
     @Inject
     AuditHttpRequestContext auditContext;
@@ -56,8 +59,7 @@ public class HttpRequestsAuditFilter implements ContainerRequestFilter, Containe
 
     @Override
     public void filter(ContainerRequestContext requestContext) throws IOException {
-        //        auditContext.setSourceIp(request.remoteAddress().toString());
-        auditContext.setSourceIp(context.request().host());
+        auditContext.setSourceIp(request.getRemoteHost());
         auditContext.setForwardedFor(requestContext.getHeaderString(AuditHttpRequestContext.X_FORWARDED_FOR_HEADER));
     }
 
