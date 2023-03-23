@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.servlet.Filter;
@@ -51,7 +52,7 @@ public class ResourceCacheControlFilter implements Filter {
         return now.getTime() - 86400000L;
     }
 
-    private List<String> disabledForUrls;
+    private List<Pattern> disabledForUrls;
 
     /**
      * C'tor
@@ -70,7 +71,7 @@ public class ResourceCacheControlFilter implements Filter {
             String[] urls = disabledForConfig.split(",");
             for (String url : urls) {
                 if (!url.isBlank()) {
-                    disabledForUrls.add(url);
+                    disabledForUrls.add(Pattern.compile(url));
                 }
             }
         }
@@ -91,8 +92,8 @@ public class ResourceCacheControlFilter implements Filter {
             disableCaching = true;
         }
 
-        for (String url : disabledForUrls) {
-            if (requestURI.contains(url)) {
+        for (Pattern pattern : disabledForUrls) {
+            if (pattern.matcher(requestURI).matches()) {
                 disableCaching = true;
             }
         }

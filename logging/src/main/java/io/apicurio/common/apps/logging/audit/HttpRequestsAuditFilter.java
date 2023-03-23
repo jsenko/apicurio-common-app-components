@@ -36,9 +36,6 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.ext.Provider;
 
-import io.vertx.core.http.HttpServerRequest;
-import io.vertx.ext.web.RoutingContext;
-
 /**
  * Filters REST API requests and responses to generate audit logs for failed requests
  *

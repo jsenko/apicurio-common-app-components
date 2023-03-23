@@ -51,21 +51,21 @@ public abstract class ConfigJsServlet extends HttpServlet {
             throws ServletException, IOException {
         String ct = "application/javascript; charset=" + StandardCharsets.UTF_8;
         response.setContentType(ct);
-        JsonFactory f = new JsonFactory();
-        try (JsonGenerator g = f.createGenerator(response.getOutputStream(), JsonEncoding.UTF8)) {
+        JsonFactory factory = new JsonFactory();
+        try (JsonGenerator generator = factory.createGenerator(response.getOutputStream(), JsonEncoding.UTF8)) {
             String varName = getVarName();
             String varDecl = "var " + varName + " = ";
             response.getOutputStream().write(varDecl.getBytes("UTF-8")); //$NON-NLS-1$
             ObjectMapper mapper = new ObjectMapper();
             mapper.setSerializationInclusion(Include.NON_NULL);
-            g.setCodec(mapper);
-            g.useDefaultPrettyPrinter();
+            generator.setCodec(mapper);
+            generator.useDefaultPrettyPrinter();
 
             Object config = generateConfig(request);
 
-            g.writeObject(config);
+            generator.writeObject(config);
 
-            g.flush();
+            generator.flush();
             response.getOutputStream().write(";".getBytes("UTF-8")); //$NON-NLS-1$ //$NON-NLS-2$
         } catch (Exception e) {
             throw new ServletException(e);
