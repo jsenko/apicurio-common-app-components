@@ -28,7 +28,7 @@ import org.slf4j.MDC;
  * This is responsible for moving the MDC configuration from one thread to another when context-propagation is being used.
  * This is important for having correct log output when multitenancy is enabled
  *
- * @author Fabian Martinez
+ * @author Carles Arnal
  */
 public class MdcContextProvider implements ThreadContextProvider {
 
