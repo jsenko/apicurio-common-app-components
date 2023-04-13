@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.apicurio.common.apps.mt.logging;
+package io.apicurio.common.apps.multitenancy.logging;
 
 import java.util.Map;
 
