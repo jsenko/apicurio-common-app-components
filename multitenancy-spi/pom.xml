@@ -15,8 +15,7 @@
         <dependency>
             <groupId>io.apicurio</groupId>
             <artifactId>apicurio-tenant-manager-datamodel</artifactId>
-            <version>${apicurio-tenant-manager.version}</version>
-            <scope>compile</scope>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 

@@ -33,17 +33,18 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+        </dependency>
+        <dependency>
             <groupId>io.apicurio</groupId>
             <artifactId>apicurio-tenant-manager-client</artifactId>
-            <version>${apicurio-tenant-manager.version}</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>io.apicurio</groupId>
             <artifactId>apicurio-common-rest-client-vertx</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>io.quarkus</groupId>

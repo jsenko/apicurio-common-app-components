@@ -96,7 +96,6 @@ public class AppAuthenticationMechanism implements HttpAuthenticationMechanism {
     @Info(category = "auth", description = "Client identifier used by the server for authentication.", availableSince = "0.1.18-SNAPSHOT", registryAvailableSince = "2.0.0.Final")
     String clientId;
 
-
     @Inject
     OidcAuthenticationMechanism oidcAuthenticationMechanism;
 
