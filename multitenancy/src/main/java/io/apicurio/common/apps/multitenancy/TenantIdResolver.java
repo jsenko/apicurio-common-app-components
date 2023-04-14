@@ -50,7 +50,7 @@ public class TenantIdResolver {
 
     void init(@Observes StartupEvent ev) {
         if (mtProperties.isMultitenancyEnabled()) {
-            log.info("Registry running with multitenancy enabled");
+            log.info("Application running with multitenancy enabled");
         }
         multitenancyBasePath = "/" + mtProperties.getNameMultitenancyBasePath() + "/";
 

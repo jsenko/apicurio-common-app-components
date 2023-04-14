@@ -59,8 +59,8 @@ public class TenantManagerClientProducer {
         if (properties.isMultitenancyEnabled()) {
 
             if (properties.getTenantManagerUrl().isEmpty()) {
-                throw new DeploymentException("Unsupported configuration, \"registry.enable.multitenancy\" is enabled " +
-                        "but the no \"registry.tenant.manager.url\" is provided");
+                throw new DeploymentException("Unsupported configuration, \"app.enable.multitenancy\" is enabled " +
+                        "but the no \"app.tenant.manager.url\" is provided");
             }
 
             Map<String, Object> clientConfigs = new HashMap<>();
@@ -74,8 +74,8 @@ public class TenantManagerClientProducer {
                 if (properties.getTenantManagerAuthUrl().isEmpty() ||
                         properties.getTenantManagerClientId().isEmpty() ||
                         properties.getTenantManagerClientSecret().isEmpty()) {
-                    throw new DeploymentException("Unsupported configuration, \"registry.enable.multitenancy\" is enabled " +
-                            "\"registry.enable.auth\" is enabled " +
+                    throw new DeploymentException("Unsupported configuration, \"app.enable.multitenancy\" is enabled " +
+                            "\"app.enable.auth\" is enabled " +
                             "but the no auth properties aren't properly configured");
                 }
 

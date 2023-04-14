@@ -33,97 +33,97 @@ public class MultitenancyProperties {
 
     @Inject
     @ConfigProperty(name = "app.enable.multitenancy", defaultValue = "false")
-    @Info(category = "mt", description = "Enable multitenancy", availableSince = "2.0.0.Final")
+    @Info(category = "mt", description = "Enable multitenancy", registryAvailableSince = "2.0.0.Final", availableSince = "0.1.19.Final")
     boolean multitenancyEnabled;
 
     @Inject
     @ConfigProperty(name = "app.multitenancy.authorization.enabled", defaultValue = "true")
-    @Info(category = "mt", description = "Enable multitenancy authorization", availableSince = "2.1.0.Final")
+    @Info(category = "mt", description = "Enable multitenancy authorization", registryAvailableSince = "2.1.0.Final", availableSince = "0.1.19.Final")
     boolean mtAuthorizationEnabled;
 
     @Inject
     @ConfigProperty(name = "app.multitenancy.types.context-path.enabled", defaultValue = "true")
-    @Info(category = "mt", description = "Enable multitenancy context path type", availableSince = "2.1.0.Final")
+    @Info(category = "mt", description = "Enable multitenancy context path type", registryAvailableSince = "2.1.0.Final", availableSince = "0.1.19.Final")
     boolean mtContextPathEnabled;
 
     @Inject
     @ConfigProperty(name = "app.multitenancy.types.subdomain.enabled", defaultValue = "false")
-    @Info(category = "mt", description = "Enable multitenancy subdomain type", availableSince = "2.1.0.Final")
+    @Info(category = "mt", description = "Enable multitenancy subdomain type", registryAvailableSince = "2.1.0.Final", availableSince = "0.1.19.Final")
     boolean mtSubdomainEnabled;
 
     @Inject
     @ConfigProperty(name = "app.multitenancy.types.request-header.enabled", defaultValue = "true")
-    @Info(category = "mt", description = "Enable multitenancy request header type", availableSince = "2.1.0.Final")
+    @Info(category = "mt", description = "Enable multitenancy request header type", registryAvailableSince = "2.1.0.Final", availableSince = "0.1.19.Final")
     boolean mtRequestHeaderEnabled;
 
     @Inject
     @ConfigProperty(name = "app.multitenancy.types.context-path.base-path", defaultValue = "t")
-    @Info(category = "mt", description = "Multitenancy context path type base path", availableSince = "2.1.0.Final")
+    @Info(category = "mt", description = "Multitenancy context path type base path", registryAvailableSince = "2.1.0.Final", availableSince = "0.1.19.Final")
     String nameMultitenancyBasePath;
 
     @Inject
     @ConfigProperty(name = "app.multitenancy.types.subdomain.location", defaultValue = "header")
-    @Info(category = "mt", description = "Multitenancy subdomain type location", availableSince = "2.1.0.Final")
+    @Info(category = "mt", description = "Multitenancy subdomain type location", registryAvailableSince = "2.1.0.Final", availableSince = "0.1.19.Final")
     String subdomainMultitenancyLocation;
 
     @Inject
     @ConfigProperty(name = "app.multitenancy.types.subdomain.header-name", defaultValue = "Host")
-    @Info(category = "mt", description = "Multitenancy subdomain type header name", availableSince = "2.1.0.Final")
+    @Info(category = "mt", description = "Multitenancy subdomain type header name", registryAvailableSince = "2.1.0.Final", availableSince = "0.1.19.Final")
     String subdomainMultitenancyHeaderName;
 
     @Inject
     @ConfigProperty(name = "app.multitenancy.types.subdomain.pattern", defaultValue = "(\\w[\\w\\d\\-]*)\\.localhost\\.local")
-    @Info(category = "mt", description = "Multitenancy subdomain type pattern", availableSince = "2.1.0.Final")
+    @Info(category = "mt", description = "Multitenancy subdomain type pattern", registryAvailableSince = "2.1.0.Final", availableSince = "0.1.19.Final")
     String subdomainMultitenancyPattern;
 
     @Inject
-    @ConfigProperty(name = "app.multitenancy.types.request-header.name", defaultValue = "X-Registry-Tenant-Id")
-    @Info(category = "mt", description = "Multitenancy request header type name", availableSince = "2.1.0.Final")
+    @ConfigProperty(name = "app.multitenancy.types.request-header.name", defaultValue = "X-Tenant-Id")
+    @Info(category = "mt", description = "Multitenancy request header type name", registryAvailableSince = "2.1.0.Final", availableSince = "0.1.19.Final")
     String tenantIdRequestHeader;
 
     @Inject
     @ConfigProperty(name = "app.multitenancy.reaper.every")
-    @Info(category = "mt", description = "Multitenancy reaper every", availableSince = "2.1.0.Final")
+    @Info(category = "mt", description = "Multitenancy reaper every", registryAvailableSince = "2.1.0.Final", availableSince = "0.1.19.Final")
     Optional<String> reaperEvery;
 
     @Inject
     @ConfigProperty(name = "app.multitenancy.reaper.period-seconds", defaultValue = "10800")
-    @Info(category = "mt", description = "Multitenancy reaper period seconds", availableSince = "2.1.0.Final")
+    @Info(category = "mt", description = "Multitenancy reaper period seconds", registryAvailableSince = "2.1.0.Final", availableSince = "0.1.19.Final")
     Long reaperPeriodSeconds;
 
     @Inject
     @ConfigProperty(name = "app.tenant.manager.url")
-    @Info(category = "mt", description = "Tenant manager URL", availableSince = "2.0.0.Final")
+    @Info(category = "mt", description = "Tenant manager URL", registryAvailableSince = "2.0.0.Final", availableSince = "0.1.19.Final")
     Optional<String> tenantManagerUrl;
 
     @Inject
     @ConfigProperty(name = "app.tenant.manager.ssl.ca.path")
-    @Info(category = "mt", description = "Tenant manager SSL Ca path", availableSince = "2.2.0.Final")
+    @Info(category = "mt", description = "Tenant manager SSL Ca path", registryAvailableSince = "2.2.0.Final", availableSince = "0.1.19.Final")
     Optional<String> tenantManagerCAFilePath;
 
     @Inject
     @ConfigProperty(name = "app.tenant.manager.auth.enabled")
-    @Info(category = "mt", description = "Tenant manager auth enabled", availableSince = "2.1.0.Final")
+    @Info(category = "mt", description = "Tenant manager auth enabled", registryAvailableSince = "2.1.0.Final", availableSince = "0.1.19.Final")
     Optional<Boolean> tenantManagerAuthEnabled;
 
     @Inject
     @ConfigProperty(name = "app.tenant.manager.auth.url.configured")
-    @Info(category = "mt", description = "Tenant manager auth url configured", availableSince = "2.1.0.Final")
+    @Info(category = "mt", description = "Tenant manager auth url configured", registryAvailableSince = "2.1.0.Final", availableSince = "0.1.19.Final")
     Optional<String> tenantManagerAuthUrl;
 
     @Inject
     @ConfigProperty(name = "app.tenant.manager.auth.client-id")
-    @Info(category = "mt", description = "Tenant manager auth client ID", availableSince = "2.1.0.Final")
+    @Info(category = "mt", description = "Tenant manager auth client ID", registryAvailableSince = "2.1.0.Final", availableSince = "0.1.19.Final")
     Optional<String> tenantManagerClientId;
 
     @Inject
     @ConfigProperty(name = "app.tenant.manager.auth.client-secret")
-    @Info(category = "mt", description = "Tenant manager auth client secret", availableSince = "2.1.0.Final")
+    @Info(category = "mt", description = "Tenant manager auth client secret", registryAvailableSince = "2.1.0.Final", availableSince = "0.1.19.Final")
     Optional<String> tenantManagerClientSecret;
 
     @Inject
     @ConfigProperty(name = "app.tenant.manager.auth.token.expiration.reduction.ms")
-    @Info(category = "mt", description = "Tenant manager auth token expiration reduction ms", availableSince = "2.2.0.Final")
+    @Info(category = "mt", description = "Tenant manager auth token expiration reduction ms", registryAvailableSince = "2.2.0.Final", availableSince = "0.1.19.Final")
     Optional<Long> tenantManagerAuthTokenExpirationReductionMs;
 
     @PostConstruct
