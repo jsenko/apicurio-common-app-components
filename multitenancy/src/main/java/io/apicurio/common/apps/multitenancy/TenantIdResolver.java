@@ -16,10 +16,12 @@
 package io.apicurio.common.apps.multitenancy;
 
 import io.quarkus.runtime.StartupEvent;
+import org.eclipse.microprofile.jwt.JsonWebToken;
 import org.slf4j.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
+import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -43,6 +45,9 @@ public class TenantIdResolver {
 
     @Inject
     MultitenancyProperties mtProperties;
+
+    @Inject
+    Instance<JsonWebToken> jsonWebToken;
 
     Pattern subdomainNamePattern;
 
@@ -139,6 +144,16 @@ public class TenantIdResolver {
                     return Optional.of(tenantId);
                 } else {
                     log.warn("Request header multi-tenancy enabled, but header value not found in request.");
+                }
+            }
+
+            if (mtProperties.isMultitenancyTokenClaimsEnabled()) {
+                for (String tenantIdClaim : mtProperties.getTenantIdClaims()) {
+                    log.trace("Resolving tenantId from token claim named: {}", tenantIdClaim);
+                    final Optional<Object> claimValue = jsonWebToken.get().claim(tenantIdClaim);
+                    if (claimValue.isPresent()) {
+                        return Optional.of((String) claimValue.get());
+                    }
                 }
             }
         }

@@ -23,6 +23,7 @@ import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.time.Duration;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -55,6 +56,15 @@ public class MultitenancyProperties {
     @ConfigProperty(name = "app.multitenancy.types.request-header.enabled", defaultValue = "true")
     @Info(category = "mt", description = "Enable multitenancy request header type", registryAvailableSince = "2.1.0.Final", availableSince = "0.1.19.Final")
     boolean mtRequestHeaderEnabled;
+
+    @Inject
+    @ConfigProperty(name = "app.multitenancy.types.token-claims.enabled", defaultValue = "false")
+    @Info(category = "mt", description = "Enable multitenancy request header type", registryAvailableSince = "2.1.0.Final", availableSince = "0.1.19.Final")
+    boolean mtTokenClaimsEnabled;
+
+    @ConfigProperty(name = "app.multitenancy.tenant.token-claim.names")
+    @Info(category = "mt", description = "Token claims used to resolve the tenant id", availableSince = "2.1.0.Final")
+    List<String> tenantTokenClaims;
 
     @Inject
     @ConfigProperty(name = "app.multitenancy.types.context-path.base-path", defaultValue = "t")
@@ -167,6 +177,13 @@ public class MultitenancyProperties {
     }
 
     /**
+     * @return true if multitenancy token claims are enabled
+     */
+    public boolean isMultitenancyTokenClaimsEnabled() {
+        return mtTokenClaimsEnabled;
+    }
+
+    /**
      * @return the nameMultitenancyBasePath
      */
     public String getNameMultitenancyBasePath() {
@@ -192,6 +209,10 @@ public class MultitenancyProperties {
      */
     public String getSubdomainMultitenancyPattern() {
         return subdomainMultitenancyPattern;
+    }
+
+    public List<String> getTenantIdClaims() {
+        return tenantTokenClaims;
     }
 
     /**

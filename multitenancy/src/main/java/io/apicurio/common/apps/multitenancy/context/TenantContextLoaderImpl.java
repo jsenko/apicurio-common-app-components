@@ -24,7 +24,7 @@ import io.apicurio.common.apps.config.Info;
 import io.apicurio.common.apps.multitenancy.ApicurioTenantContext;
 import io.apicurio.common.apps.multitenancy.TenantContext;
 import io.apicurio.common.apps.multitenancy.TenantContextLoader;
-import io.apicurio.common.apps.multitenancy.TenantMetadataService;
+import io.apicurio.common.apps.multitenancy.TenantManagerService;
 import io.apicurio.common.apps.multitenancy.exceptions.TenantNotFoundException;
 import io.apicurio.common.apps.multitenancy.limits.TenantLimitsConfiguration;
 import io.apicurio.common.apps.multitenancy.limits.TenantLimitsConfigurationService;
@@ -55,7 +55,7 @@ public class TenantContextLoaderImpl implements TenantContextLoader {
     private ApicurioTenantContext defaultTenantContext;
 
     @Inject
-    TenantMetadataService tenantMetadataService;
+    TenantManagerService tenantMetadataService;
 
     @Inject
     TenantLimitsConfigurationService limitsConfigurationService;

@@ -23,6 +23,7 @@ import io.apicurio.common.apps.util.OptionalBean;
 import io.apicurio.rest.client.auth.exception.ForbiddenException;
 import io.apicurio.rest.client.auth.exception.NotAuthorizedException;
 import io.apicurio.tenantmanager.api.datamodel.ApicurioTenant;
+import io.apicurio.tenantmanager.api.datamodel.NewApicurioTenantRequest;
 import io.apicurio.tenantmanager.api.datamodel.TenantStatusValue;
 import io.apicurio.tenantmanager.api.datamodel.UpdateApicurioTenantRequest;
 import io.apicurio.tenantmanager.client.TenantManagerClient;
@@ -41,10 +42,31 @@ import static io.apicurio.common.apps.multitenancy.FaultToleranceConstants.TIMEO
  * @author Jakub Senko <em>m@jsenko.net</em>
  */
 @ApplicationScoped
-public class TenantMetadataService {
+public class TenantManagerService {
 
     @Inject
     OptionalBean<TenantManagerClient> tenantManagerClient;
+
+
+    @Retry(abortOn = {
+            UnsupportedOperationException.class, TenantNotFoundException.class,
+            TenantNotAuthorizedException.class, TenantForbiddenException.class
+    }) // 3 retries, 200ms jitter
+    @Timeout(TIMEOUT_MS)
+    public ApicurioTenant createTenant(NewApicurioTenantRequest tenantRequest) throws TenantNotFoundException {
+        if (tenantManagerClient.isEmpty()) {
+            throw new UnsupportedOperationException("Multitenancy is not enabled");
+        }
+        try {
+            return tenantManagerClient.get().createTenant(tenantRequest);
+        } catch (ApicurioTenantNotFoundException e) {
+            throw new TenantNotFoundException(e.getMessage());
+        } catch (NotAuthorizedException e) {
+            throw new TenantNotAuthorizedException(e.getMessage());
+        } catch (ForbiddenException e) {
+            throw new TenantForbiddenException(e.getMessage());
+        }
+    }
 
     @Retry(abortOn = {
             UnsupportedOperationException.class, TenantNotFoundException.class,
