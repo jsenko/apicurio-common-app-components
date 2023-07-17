@@ -56,7 +56,7 @@ public class TenantManagerClientProducer {
     @ApplicationScoped
     OptionalBean<TenantManagerClient> produce() {
 
-        if (properties.isMultitenancyEnabled()) {
+        if (properties.isMultitenancyEnabled() & !properties.isStandaloneMultitenancyEnabled()) {
 
             if (properties.getTenantManagerUrl().isEmpty()) {
                 throw new DeploymentException("Unsupported configuration, \"app.enable.multitenancy\" is enabled " +

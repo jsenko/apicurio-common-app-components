@@ -38,6 +38,11 @@ public class MultitenancyProperties {
     boolean multitenancyEnabled;
 
     @Inject
+    @ConfigProperty(name = "app.enable.multitenancy.standalone", defaultValue = "false")
+    @Info(category = "mt", description = "Enable multitenancy", registryAvailableSince = "2.5.0.Final", availableSince = "0.1.20.Final")
+    boolean standaloneMultitenancyEnabled;
+
+    @Inject
     @ConfigProperty(name = "app.multitenancy.authorization.enabled", defaultValue = "true")
     @Info(category = "mt", description = "Enable multitenancy authorization", registryAvailableSince = "2.1.0.Final", availableSince = "0.1.19.Final")
     boolean mtAuthorizationEnabled;
@@ -146,6 +151,13 @@ public class MultitenancyProperties {
      */
     public boolean isMultitenancyEnabled() {
         return multitenancyEnabled;
+    }
+
+    /**
+     * @return the multitenancyEnabled
+     */
+    public boolean isStandaloneMultitenancyEnabled() {
+        return standaloneMultitenancyEnabled;
     }
 
     /**

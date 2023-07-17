@@ -21,10 +21,7 @@ import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.google.common.util.concurrent.UncheckedExecutionException;
 import io.apicurio.common.apps.config.Info;
-import io.apicurio.common.apps.multitenancy.ApicurioTenantContext;
-import io.apicurio.common.apps.multitenancy.TenantContext;
-import io.apicurio.common.apps.multitenancy.TenantContextLoader;
-import io.apicurio.common.apps.multitenancy.TenantManagerService;
+import io.apicurio.common.apps.multitenancy.*;
 import io.apicurio.common.apps.multitenancy.exceptions.TenantNotFoundException;
 import io.apicurio.common.apps.multitenancy.limits.TenantLimitsConfiguration;
 import io.apicurio.common.apps.multitenancy.limits.TenantLimitsConfigurationService;
@@ -73,9 +70,36 @@ public class TenantContextLoaderImpl implements TenantContextLoader {
     @Info(category = "mt", description = "Tenants context cache max size", availableSince = "2.4.1.Final")
     Long cacheMaxSize;
 
-    public void onStart(@Observes StartupEvent ev) {
+    @Inject
+    MultitenancyProperties properties;
 
-        CacheLoader<String, ApicurioTenantContext> cacheLoader = new CacheLoader<>() {
+    public void onStart(@Observes StartupEvent ev) {
+        contextsCache = CacheBuilder
+                .newBuilder()
+                .expireAfterWrite(cacheCheckPeriod, TimeUnit.MILLISECONDS)
+                .maximumSize(cacheMaxSize)
+                .build(getCacheLoader());
+    }
+
+    private CacheLoader<String, ApicurioTenantContext> getCacheLoader() {
+
+        CacheLoader<String, ApicurioTenantContext> standaloneLoader = new CacheLoader<>() {
+            @Override
+            public ApicurioTenantContext load(@NotNull String tenantId) {
+                ApicurioTenant tenantMetadata = new ApicurioTenant();
+                tenantMetadata.setStatus(TenantStatusValue.READY);
+                tenantMetadata.setTenantId(tenantId);
+                tenantMetadata.setOrganizationId(tenantId);
+                tenantMetadata.setCreatedBy(tenantId);
+                tenantMetadata.setName(tenantId);
+
+                TenantLimitsConfiguration limitsConfiguration = limitsConfigurationService.fromTenantMetadata(tenantMetadata);
+                return new ApicurioTenantContextImpl(tenantId, tenantMetadata.getCreatedBy(), limitsConfiguration, tenantMetadata.getStatus(), String.valueOf(tenantMetadata.getOrganizationId()));
+            }
+        };
+
+
+        CacheLoader<String, ApicurioTenantContext> remoteLoader = new CacheLoader<>() {
             @Override
             public ApicurioTenantContext load(@NotNull String tenantId) {
                 ApicurioTenant tenantMetadata = tenantMetadataService.getTenant(tenantId);
@@ -84,11 +108,12 @@ public class TenantContextLoaderImpl implements TenantContextLoader {
             }
         };
 
-        contextsCache = CacheBuilder
-                .newBuilder()
-                .expireAfterWrite(cacheCheckPeriod, TimeUnit.MILLISECONDS)
-                .maximumSize(cacheMaxSize)
-                .build(cacheLoader);
+
+        if (properties.isStandaloneMultitenancyEnabled()) {
+            return standaloneLoader;
+        } else {
+            return remoteLoader;
+        }
     }
 
     /**
