@@ -79,6 +79,10 @@ public class AppAuthenticationMechanism implements HttpAuthenticationMechanism {
     @Info(category = "auth", description = "Client credentials token expiration time.", availableSince = "0.1.18-SNAPSHOT", registryAvailableSince = "2.2.6.Final")
     Integer accessTokenExpiration;
 
+    @ConfigProperty(name = "app.authn.basic-auth.scope")
+    @Info(category = "auth", description = "Client credentials scope.", availableSince = "0.1.21-SNAPSHOT", registryAvailableSince = "2.5.0.Final")
+    Optional<String> scope;
+
     @ConfigProperty(name = "app.authn.audit.log.prefix", defaultValue = "audit")
     @Info(category = "auth", description = "Prefix used for application audit logging.", availableSince = "0.1.18-SNAPSHOT", registryAvailableSince = "2.2.6")
 
@@ -244,7 +248,7 @@ public class AppAuthenticationMechanism implements HttpAuthenticationMechanism {
 
     @Retry(retryOn = AuthException.class, maxRetries = 4, delay = 1, delayUnit = ChronoUnit.SECONDS)
     public String getAccessToken(Pair<String, String> clientCredentials, String credentialsHash) {
-        OidcAuth oidcAuth = new OidcAuth(httpClient, clientCredentials.getLeft(), clientCredentials.getRight());
+        OidcAuth oidcAuth = new OidcAuth(httpClient, clientCredentials.getLeft(), clientCredentials.getRight(), Duration.ofSeconds(1), scope.orElse(null));
         try {
             String jwtToken = oidcAuth.authenticate();//If we manage to get a token from basic credentials, try to authenticate it using the fetched token using the identity provider manager
             cachedAccessTokens.put(credentialsHash, new WrappedValue<>(Duration.ofMinutes(accessTokenExpiration), Instant.now(), jwtToken));
