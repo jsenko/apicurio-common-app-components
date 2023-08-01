@@ -39,7 +39,12 @@ public class MultitenancyProperties {
 
     @Inject
     @ConfigProperty(name = "app.enable.multitenancy.standalone", defaultValue = "false")
-    @Info(category = "mt", description = "Enable multitenancy", registryAvailableSince = "2.5.0.Final", availableSince = "0.1.20.Final")
+    @Info(category = "mt", description = "Enable Standalone Multitenancy mode. " +
+            "In this mode, Registry provides basic multi-tenancy features, without dependencies on additional components " +
+            "to manage tenants and their metadata. A new tenant is simply created as soon as a tenant ID is extracted " +
+            "from the request for the first time. The tenant IDs must be managed externally, " +
+            "and tenants can be effectively deleted by deleting their data.",
+            dependsOn = {"app.enable.multitenancy"}, registryAvailableSince = "2.5.0.Final", availableSince = "0.1.21.Final")
     boolean standaloneMultitenancyEnabled;
 
     @Inject

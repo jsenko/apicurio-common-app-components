@@ -42,4 +42,17 @@ public @interface Info {
     @Nonbinding
     String registryAvailableSince() default "";
 
+    /**
+     * Lists related configuration properties.
+     * TODO: Not used in docs yet
+     */
+    @Nonbinding
+    String[] seeAlso() default {};
+
+    /**
+     * Lists configuration properties that must be configured before using this property.
+     * TODO: Not used in docs yet
+     */
+    @Nonbinding
+    String[] dependsOn() default {};
 }
